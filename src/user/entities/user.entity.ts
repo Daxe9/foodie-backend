@@ -1,3 +1,4 @@
+import { Optional } from "@nestjs/common";
 import { IsEmail, Length, IsInt, IsString } from "class-validator";
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
@@ -19,13 +20,16 @@ export class User {
 
     @Column()
     @Length(8, 64)
-    password: string;
+    pw: string;
 
     @Column()
     @IsInt()
-    phoneNumber: number;
+    phone: number;
 
     @Column()
     @IsString()
     address: string;
+
+    @Optional()
+    ordersId: number[];
 }

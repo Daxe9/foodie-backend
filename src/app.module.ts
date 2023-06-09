@@ -7,6 +7,8 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { DataSource } from "typeorm";
 import { User } from "./user/entities/user.entity";
+import { ItemsModule } from "./items/items.module";
+import { OrdersModule } from "./orders/orders.module";
 
 @Module({
     imports: [
@@ -28,7 +30,9 @@ import { User } from "./user/entities/user.entity";
             })
         }),
         RestaurantsModule,
-        UserModule
+        UserModule,
+        ItemsModule,
+        OrdersModule
     ],
     controllers: [AppController],
     providers: [AppService]
