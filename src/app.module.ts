@@ -4,16 +4,26 @@ import { AppService } from "./app.service";
 import { RestaurantsModule } from "./restaurants/restaurants.module";
 import { UserModule } from "./user/user.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import { DataSource } from "typeorm";
 
 @Module({
     imports: [
-        TypeOrmModule.forRoot({
-            type: "mysql",
-            host: "localhost",
-            port: 3306,
-            entities: [],
-            synchronize: true
+        ConfigModule.forRoot({
+            isGlobal: true
+        }),
+        TypeOrmModule.forRootAsync({
+            imports: [],
+            inject: [ConfigService],
+            useFactory: async (configService: ConfigService) => ({
+                type: "mysql",
+                host: "localhost",
+                port: 3306,
+                username: configService.get<string>("DATABASE_USER") || "",
+                password: configService.get<string>("DATABASE_PASSWORD") || "",
+                entities: [],
+                synchronize: true
+            })
         }),
         RestaurantsModule,
         UserModule
