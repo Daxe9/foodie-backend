@@ -6,6 +6,9 @@ import { UserModule } from "./user/user.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { DataSource } from "typeorm";
+import { ItemModule } from './item/item.module';
+import { ItemsModule } from './items/items.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
     imports: [
@@ -26,7 +29,10 @@ import { DataSource } from "typeorm";
             })
         }),
         RestaurantsModule,
-        UserModule
+        UserModule,
+        ItemModule,
+        ItemsModule,
+        OrdersModule
     ],
     controllers: [AppController],
     providers: [AppService]

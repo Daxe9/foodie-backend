@@ -1,4 +1,4 @@
-import Item from "src/restaurants/entities/item.entity";
+import Item from "src/items/entities/item.entity";
 import { IsEmail, IsInt, IsString, IsOptional, Length } from "class-validator";
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
@@ -7,10 +7,10 @@ export class Restaurant {
     email: string;
 
     @Length(8, 64)
-    password: string;
+    pw: string;
 
     @IsInt()
-    phoneNumber: number;
+    phone: number;
 
     @IsString()
     address: string;
@@ -19,5 +19,5 @@ export class Restaurant {
     name: string;
 
     @IsOptional()
-    menu: Item[];
+    itemsId: number[];
 }

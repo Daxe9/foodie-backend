@@ -1,3 +1,4 @@
+import { Optional } from "@nestjs/common";
 import { IsEmail, Length, IsInt, IsString } from "class-validator";
 
 export class User {
@@ -5,11 +6,14 @@ export class User {
     email: string;
 
     @Length(8, 64)
-    password: string;
+    pw: string;
 
     @IsInt()
-    phoneNumber: number;
+    phone: number;
 
     @IsString()
     address: string;
+
+    @Optional()
+    ordersId: number[];
 }
