@@ -6,6 +6,7 @@ import { UserModule } from "./user/user.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { DataSource } from "typeorm";
+import { User } from "./user/entities/user.entity";
 
 @Module({
     imports: [
@@ -19,9 +20,10 @@ import { DataSource } from "typeorm";
                 type: "mysql",
                 host: "localhost",
                 port: 3306,
+                database: "FOODIE_DEV",
                 username: configService.get<string>("DATABASE_USER") || "",
                 password: configService.get<string>("DATABASE_PASSWORD") || "",
-                entities: [],
+                entities: [User],
                 synchronize: true
             })
         }),
