@@ -9,11 +9,10 @@ import { InjectRepository } from "@nestjs/typeorm";
 export class UserService {
     constructor(
         @InjectRepository(User)
-        private userRepository: Repository<User>) {}
+        private userRepository: Repository<User>
+    ) {}
 
-    create(createUserDto: CreateUserDto) {
-        
-    }
+    create(createUserDto: CreateUserDto) {}
 
     findAll() {
         return `This action returns all user`;
@@ -21,18 +20,15 @@ export class UserService {
 
     async findOne(email: string): Promise<any | null> {
         try {
-            const result = await this.userRepository.findOneBy({ EMAIL: email });
-            console.log(result)
+            const result = await this.userRepository.findOneBy({ email });
+            console.log(result);
             return result;
-        } catch(e: any) {
-            console.error(e.message)
+        } catch (e: any) {
+            console.error(e.message);
             return {
                 message: e.message
-            }
+            };
         }
-
-
-
     }
 
     update(id: number, updateUserDto: UpdateUserDto) {

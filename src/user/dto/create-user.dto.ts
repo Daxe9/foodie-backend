@@ -10,7 +10,6 @@ export class CreateUserDto {
     surname: string;
 
     @IsEmail()
-    @Length(1)
     email: string;
 
     @Length(8, 256)

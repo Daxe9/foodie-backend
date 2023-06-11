@@ -1,35 +1,46 @@
 import { Optional } from "@nestjs/common";
-import { IsEmail, Length, IsInt, IsString } from "class-validator";
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import {
+    IsEmail,
+    Length,
+    IsInt,
+    IsString,
+    IsMobilePhone
+} from "class-validator";
+import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
+import { Order } from "../../order/entities/order.entity";
 
 @Entity()
 export class User {
     @Column()
     @IsString()
     @Length(1)
-    name: string;
+    firstName: string;
 
     @Column()
     @IsString()
     @Length(1)
-    surname: string;
+    lastName: string;
 
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn()
     @IsEmail()
-    EMAIL: string;
+    email: string;
 
     @Column()
-    @Length(8, 64)
-    pw: string;
+    @Length(8, 256)
+    password: string;
 
-    @Column()
-    @IsInt()
-    phone: number;
+    // international standard support up to 15 digits
+    @Column({
+        length: 15
+    })
+    @IsMobilePhone("it-IT")
+    phone: string;
 
     @Column()
     @IsString()
     address: string;
 
+    @OneToMany(() => Order, (order) => order.user)
     @Optional()
-    ordersId: number[];
+    orders: Order[];
 }
