@@ -5,20 +5,21 @@ import { User } from "./entities/user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UtilsService } from "../utils/utils.service";
+import {AuthService} from "../auth/auth.service";
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User)
-        private userRepository: Repository<User>
+        private userRepository: Repository<User>,
     ) {}
 
     async insert(createUserDto: CreateUserDto) {
         return this.userRepository.insert(createUserDto);
     }
 
-    findAll() {
-        return `This action returns all user`;
+    async findOne(email: string): Promise<User | null> {
+        return this.userRepository.findOneBy({ email });
     }
 
     async isPresent(email: string): Promise<boolean> {

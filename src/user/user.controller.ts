@@ -6,22 +6,23 @@ import {
     Patch,
     Param,
     Delete,
+    Request,
     HttpException,
-    HttpStatus
+    HttpStatus, UseGuards
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
-import { AccessUserDto } from "./dto/access-user.dto";
 import { UtilsService } from "../utils/utils.service";
-import { User } from "./entities/user.entity";
-import {InsertResult} from "typeorm";
+import { JwtService } from "@nestjs/jwt";
+import {LocalAuthGuard} from "../auth/local-auth.guard";
+import {AuthService} from "../auth/auth.service";
 
 @Controller("user")
 export class UserController {
     constructor(
         private readonly userService: UserService,
-        private readonly utilsService: UtilsService
+        private readonly utilsService: UtilsService,
     ) {}
 
     @Post("/register")
@@ -37,7 +38,12 @@ export class UserController {
         // check whether the user is present
         let isPresent = await this.userService.isPresent(createUserDto.email);
         if (isPresent) {
-            return new HttpException({ reason: `User with given(${createUserDto.email}) email is already present`}, HttpStatus.BAD_REQUEST);
+            return new HttpException(
+                {
+                    reason: `User with given(${createUserDto.email}) email is already present`
+                },
+                HttpStatus.BAD_REQUEST
+            );
         }
 
         // convert columns in lower case except for password
@@ -62,24 +68,32 @@ export class UserController {
             );
         }
 
-        const hashedPassword: string = await this.utilsService.hash(createUserDto.password);
+        // hash password with bcrypt
+        const hashedPassword: string = await this.utilsService.hash(
+            createUserDto.password
+        );
         try {
-            const result: InsertResult = await this.userService.insert({
+            await this.userService.insert({
                 ...createUserDto,
                 password: hashedPassword
             });
+            const payload = createUserDto;
+            delete payload.password;
             return {
-                message: `User with email(${createUserDto.email}) is created.`
+                message: `User with email(${createUserDto.email}) is created.`,
             };
         } catch (e: any) {
             return {
                 message: e.message
-            }
+            };
         }
     }
 
+    @UseGuards(LocalAuthGuard)
     @Post("/login")
-    login(@Body() accessUserDto: AccessUserDto) {}
+    async login(@Request() req) {
+        return req.user;
+    }
 
     @Patch(":id")
     update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {

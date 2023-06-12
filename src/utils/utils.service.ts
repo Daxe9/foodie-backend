@@ -1,10 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import * as bcrypt from "bcrypt"
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class UtilsService {
     private readonly saltRounds = 10;
-
 
     passwordValidation(password: string): boolean {
         // TODO: Test

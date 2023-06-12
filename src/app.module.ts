@@ -14,6 +14,7 @@ import { Item } from "./item/entities/item.entity";
 import { RiderModule } from "./rider/rider.module";
 import { Order } from "./order/entities/order.entity";
 import { Rider } from "./rider/entities/rider.entity";
+import { AuthModule } from "./auth/auth.module";
 
 @Module({
     imports: [
@@ -21,7 +22,6 @@ import { Rider } from "./rider/entities/rider.entity";
             isGlobal: true
         }),
         TypeOrmModule.forRootAsync({
-            imports: [],
             inject: [ConfigService],
             useFactory: async (configService: ConfigService) => ({
                 type: "mysql",
@@ -39,7 +39,8 @@ import { Rider } from "./rider/entities/rider.entity";
         UserModule,
         ItemModule,
         OrderModule,
-        RiderModule
+        RiderModule,
+        AuthModule
     ],
     controllers: [AppController],
     providers: [AppService]
