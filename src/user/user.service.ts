@@ -4,6 +4,7 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+import { UtilsService } from "../utils/utils.service";
 
 @Injectable()
 export class UserService {
@@ -12,23 +13,17 @@ export class UserService {
         private userRepository: Repository<User>
     ) {}
 
-    create(createUserDto: CreateUserDto) {}
+    async insert(createUserDto: CreateUserDto) {
+        return this.userRepository.insert(createUserDto);
+    }
 
     findAll() {
         return `This action returns all user`;
     }
 
-    async findOne(email: string): Promise<any | null> {
-        try {
-            const result = await this.userRepository.findOneBy({ email });
-            console.log(result);
-            return result;
-        } catch (e: any) {
-            console.error(e.message);
-            return {
-                message: e.message
-            };
-        }
+    async isPresent(email: string): Promise<boolean> {
+        const result = await this.userRepository.findOneBy({ email });
+        return !!result;
     }
 
     update(id: number, updateUserDto: UpdateUserDto) {

@@ -31,7 +31,7 @@ import { Rider } from "./rider/entities/rider.entity";
                 username: configService.get<string>("DATABASE_USER") || "",
                 password: configService.get<string>("DATABASE_PASSWORD") || "",
                 entities: [User, Restaurant, Item, Order, Rider],
-                synchronize: true
+                synchronize: false
             })
         }),
         TypeOrmModule.forFeature([User, Restaurant, Item]),
