@@ -70,11 +70,6 @@ export class UserController {
                 ...createUserDto,
                 password: hashedPassword
             });
-            const payload: UserPayload = {
-                firstName: createUserDto.firstName,
-                lastName: createUserDto.lastName,
-                email: createUserDto.email
-            };
             return {
                 message: `User with email(${createUserDto.email}) is created.`
             };
