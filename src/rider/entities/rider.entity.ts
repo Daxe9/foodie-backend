@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-import {IsEmail, IsMobilePhone, IsNumber, IsString} from "class-validator";
+import { IsEmail, IsMobilePhone, IsNumber, IsString } from "class-validator";
 
 @Entity()
 export class Rider {

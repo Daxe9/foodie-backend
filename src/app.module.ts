@@ -14,6 +14,8 @@ import { Item } from "./item/entities/item.entity";
 import { RiderModule } from "./rider/rider.module";
 import { Order } from "./order/entities/order.entity";
 import { Rider } from "./rider/entities/rider.entity";
+import { UtilsModule } from "./utils/utils.module";
+import { JwtModule } from "@nestjs/jwt";
 
 @Module({
     imports: [
@@ -36,9 +38,11 @@ import { Rider } from "./rider/entities/rider.entity";
         TypeOrmModule.forFeature([User, Restaurant, Item]),
         RestaurantModule,
         UserModule,
+        UtilsModule,
         ItemModule,
         OrderModule,
-        RiderModule
+        RiderModule,
+        JwtModule
     ],
     controllers: [AppController],
     providers: [AppService]

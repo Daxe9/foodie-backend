@@ -1,4 +1,5 @@
-import {CreateUserDto} from "./user/dto/create-user.dto";
+import { CreateUserDto } from "./user/dto/create-user.dto";
+import { CreateRestaurantDto } from "./restaurant/dto/create-restaurant.dto";
 
 export const users = [
     {
@@ -81,7 +82,6 @@ export const restaurants = [
     }
 ];
 
-
 export const items = [
     {
         name: "Item A",
@@ -121,5 +121,15 @@ const specialUsers: CreateUserDto[] = [
         password: "Pitonearrabbiato0@",
         phone: "3333333333",
         address: "Via G 43"
-    },
-]
+    }
+];
+
+const specialRestaurant: CreateRestaurantDto[] = [
+    {
+        name: "La casa dei proci",
+        email: "casa@proci.com",
+        password: "Wlatopa!1!",
+        phone: "3392361538",
+        address: "via di itaca 91 "
+    }
+];

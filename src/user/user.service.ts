@@ -64,6 +64,7 @@ export class UserService {
     async login(user: UserPayload): Promise<{
         accessToken: string;
     }> {
+        // generate a jwt token with user info
         return {
             accessToken: this.jwtService.sign(user)
         };

@@ -1,7 +1,7 @@
 import { Restaurant } from "../entities/restaurant.entity";
 import { IsMobilePhone, IsString, Length } from "class-validator";
 
-export class CreateRestaurantDto extends Restaurant {
+export class CreateRestaurantDto {
     @IsString()
     @Length(1)
     name: string;
@@ -12,7 +12,7 @@ export class CreateRestaurantDto extends Restaurant {
 
     @IsString()
     @Length(1)
-    pw: string;
+    password: string;
 
     @IsString()
     @Length(1)

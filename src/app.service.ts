@@ -4,7 +4,7 @@ import { User } from "./user/entities/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Restaurant } from "./restaurant/entities/restaurant.entity";
 import { Item } from "./item/entities/item.entity";
-import { users, restaurants, items} from "./seeds"
+import { users, restaurants, items } from "./seeds";
 
 @Injectable()
 export class AppService implements OnApplicationBootstrap {

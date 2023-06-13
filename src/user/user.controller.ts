@@ -15,9 +15,9 @@ import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UtilsService } from "../utils/utils.service";
-import { LocalAuthGuard } from "./local-auth.guard";
 import { User, UserPayload } from "./entities/user.entity";
-import { JwtAuthGuard } from "../order/jwt-auth.guard";
+import { JwtAuthGuard } from "../jwt/jwt-auth.guard";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller("user")
 export class UserController {
@@ -80,10 +80,9 @@ export class UserController {
         }
     }
 
-    @UseGuards(LocalAuthGuard)
+    @UseGuards(AuthGuard("user"))
     @Post("/login")
     async login(@Request() req) {
-        console.log(`User with given email is logged in ${req.user.email}`);
         return this.userService.login(req.user as UserPayload);
     }
 

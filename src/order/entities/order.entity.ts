@@ -1,7 +1,13 @@
 import { IsNumber, Length } from "class-validator";
-import {Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {
+    Entity,
+    JoinColumn,
+    ManyToMany,
+    ManyToOne,
+    PrimaryGeneratedColumn
+} from "typeorm";
 import { User } from "../../user/entities/user.entity";
-import {Item} from "../../item/entities/item.entity";
+import { Item } from "../../item/entities/item.entity";
 
 @Entity()
 export class Order {
@@ -16,10 +22,8 @@ export class Order {
     @Length(1)
     user: User;
 
-    @ManyToMany(
-        () => Item
-    )
-    items: Item[]
+    @ManyToMany(() => Item)
+    items: Item[];
 
     // TODO: add rider references
     // @IsNumber()
