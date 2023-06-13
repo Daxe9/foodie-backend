@@ -9,7 +9,7 @@ export class Restaurant {
     email: string;
 
     @Column()
-    @Length(8, 64)
+    @Length(8, 255)
     password: string;
 
     @Column({

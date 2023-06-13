@@ -1,7 +1,8 @@
 import { IsNumber, IsString, Length, IsOptional } from "class-validator";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import { Restaurant } from "../../restaurant/entities/restaurant.entity";
 import { JoinColumn } from "typeorm";
+import {Order} from "../../order/entities/order.entity";
 
 @Entity()
 export class Item {
@@ -26,8 +27,20 @@ export class Item {
     @Length(1)
     restaurant: Restaurant;
 
-    /*
-    @IsOptional()
-    ordersId: number[];
-     */
+
+    @ManyToMany(
+        () => Order
+    )
+    @JoinTable({
+        name: "itemOrder",
+        joinColumn: {
+            name: "item",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "order",
+            referencedColumnName: "id"
+        }
+    })
+    orders: Order[];
 }
