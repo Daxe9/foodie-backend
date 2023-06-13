@@ -29,7 +29,7 @@ export class Restaurant {
     address: string;
 
     @Column()
-    @Length(2, 50)
+    @Length(2, 255)
     name: string;
 
     @OneToMany(() => Item, (item) => item.restaurant)

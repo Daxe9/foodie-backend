@@ -7,22 +7,26 @@ import { JwtModule } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Restaurant } from "./entities/restaurant.entity";
+import { ItemModule } from "../item/item.module";
+import { ItemService } from "../item/item.service";
+import { Item } from "../item/entities/item.entity";
 
 @Module({
     imports: [
         PassportModule,
+        ItemModule,
         JwtModule.registerAsync({
             inject: [ConfigService],
             useFactory: async (configService: ConfigService) => ({
                 secret: configService.get<string>("JWT_SECRET") || "secret",
                 signOptions: {
-                    expiresIn: "10s"
+                    expiresIn: "1h"
                 }
             })
         }),
-        TypeOrmModule.forFeature([Restaurant])
+        TypeOrmModule.forFeature([Restaurant, Item])
     ],
     controllers: [RestaurantController],
-    providers: [RestaurantService, LocalStrategy]
+    providers: [RestaurantService, LocalStrategy, ItemService]
 })
 export class RestaurantModule {}

@@ -1,15 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-import { IsEmail, IsMobilePhone, IsNumber, IsString } from "class-validator";
+import { Entity, Column, PrimaryColumn } from "typeorm";
+import { IsEmail, IsMobilePhone, IsString } from "class-validator";
 
 @Entity()
 export class Rider {
-    @PrimaryGeneratedColumn()
-    @IsNumber()
-    id: number;
-
-    @Column({
-        unique: true
-    })
+    @PrimaryColumn()
     @IsEmail()
     email: string;
 

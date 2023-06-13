@@ -35,7 +35,7 @@ import { JwtModule } from "@nestjs/jwt";
                 synchronize: false
             })
         }),
-        TypeOrmModule.forFeature([User, Restaurant, Item]),
+        TypeOrmModule.forFeature([User, Restaurant, Item, Rider]),
         RestaurantModule,
         UserModule,
         UtilsModule,

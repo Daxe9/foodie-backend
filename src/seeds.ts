@@ -85,23 +85,61 @@ export const restaurants = [
 export const items = [
     {
         name: "Item A",
-        description: "Description A"
+        description: "Description A",
+        preparationTimeMinutes: 12
     },
     {
         name: "Item B",
-        description: "Description B"
+        description: "Description B",
+        preparationTimeMinutes: 5
     },
     {
         name: "Item C",
-        description: "Description C"
+        description: "Description C",
+        preparationTimeMinutes: 2
     },
     {
         name: "Item D",
-        description: "Description D"
+        description: "Description D",
+        preparationTimeMinutes: 20
     },
     {
         name: "Item E",
-        description: "Description E"
+        description: "Description E",
+        preparationTimeMinutes: 10
+    }
+];
+
+export const riders = [
+    {
+        email: "rider1@example.com",
+        password: "password1",
+        phone: "+1234567890",
+        workingSite: "Site 1"
+    },
+    {
+        email: "rider2@example.com",
+        password: "password2",
+        phone: "+9876543210",
+        workingSite: "Site 2"
+    },
+    {
+        email: "rider3@example.com",
+        password: "password3",
+        phone: "+1112223333",
+        workingSite: "Site 3"
+    },
+    {
+        email: "rider4@example.com",
+        password: "password4",
+        phone: "+4445556666",
+        workingSite: "Site 4"
+    },
+    {
+        email: "rider5@example.com",
+        password: "password5",
+        phone: "+7778889999",
+        workingSite: "Site 5"
     }
 ];
 

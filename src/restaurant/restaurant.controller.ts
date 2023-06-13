@@ -4,6 +4,7 @@ import {
     Get,
     HttpException,
     HttpStatus,
+    Patch,
     Post,
     Request,
     UseGuards
@@ -14,12 +15,16 @@ import { CreateRestaurantDto } from "./dto/create-restaurant.dto";
 import { Restaurant, RestaurantPayload } from "./entities/restaurant.entity";
 import { JwtAuthGuard } from "../jwt/jwt-auth.guard";
 import { AuthGuard } from "@nestjs/passport";
+import { UpdateItemsDto } from "./dto/update-items.dto";
+import { ItemService } from "../item/item.service";
+import { Item } from "../item/entities/item.entity";
 
 @Controller("restaurant")
 export class RestaurantController {
     constructor(
         private readonly restaurantService: RestaurantService,
-        private readonly utilsService: UtilsService
+        private readonly utilsService: UtilsService,
+        private readonly itemService: ItemService
     ) {}
 
     @Post("/register")
@@ -78,7 +83,6 @@ export class RestaurantController {
         }
     }
 
-
     @UseGuards(AuthGuard("restaurant"))
     @Post("/login")
     async login(@Request() req) {
@@ -93,5 +97,38 @@ export class RestaurantController {
         );
         delete restaurant.password;
         return restaurant;
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Patch()
+    async addItems(@Request() req, @Body() updateItemsDto: UpdateItemsDto) {
+        const restaurant: Restaurant = await this.restaurantService.findOne(
+            req.user.email
+        );
+        if (!restaurant) {
+            return new HttpException(
+                "No restaurant found",
+                HttpStatus.NOT_FOUND
+            );
+        }
+        let temp = updateItemsDto.items
+        if (!Array.isArray(temp)) {
+            temp = [temp];
+        }
+
+        const items: Item[] = this.itemService.create(temp);
+
+        // if it is one item then convert it to a list of items
+
+
+        // establish relation
+        items.forEach((item: Item) => {
+            item.restaurant = restaurant;
+            restaurant.items.push(item);
+        });
+
+        // TODO: transaction
+        await this.restaurantService.save(restaurant);
+        await this.itemService.save(items);
     }
 }

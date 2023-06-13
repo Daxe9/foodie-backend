@@ -20,6 +20,9 @@ export class RestaurantService {
     async findOne(email: string): Promise<Restaurant | null> {
         return this.restaurantRepository.findOneBy({ email });
     }
+    async save(restaurant: Restaurant) {
+        return this.restaurantRepository.save(restaurant);
+    }
 
     async isPresent(email: string): Promise<boolean> {
         const result = await this.restaurantRepository.findOneBy({ email });

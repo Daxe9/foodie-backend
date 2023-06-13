@@ -1,4 +1,4 @@
-import { IsNumber, IsString, Length, IsOptional } from "class-validator";
+import { IsNumber, IsString, Length, IsOptional, IsInt } from "class-validator";
 import {
     Column,
     Entity,
@@ -25,6 +25,10 @@ export class Item {
     @Column()
     @IsString()
     description: string;
+
+    @Column()
+    @IsInt()
+    preparationTimeMinutes: number;
 
     @ManyToOne(() => Restaurant, (restaurant) => restaurant.items)
     @JoinColumn({

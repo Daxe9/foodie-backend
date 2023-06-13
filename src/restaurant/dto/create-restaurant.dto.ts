@@ -3,7 +3,7 @@ import { IsMobilePhone, IsString, Length } from "class-validator";
 
 export class CreateRestaurantDto {
     @IsString()
-    @Length(1)
+    @Length(2, 255)
     name: string;
 
     @IsString()

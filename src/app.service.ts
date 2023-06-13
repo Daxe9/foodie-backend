@@ -4,7 +4,8 @@ import { User } from "./user/entities/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Restaurant } from "./restaurant/entities/restaurant.entity";
 import { Item } from "./item/entities/item.entity";
-import { users, restaurants, items } from "./seeds";
+import { users, restaurants, items, riders } from "./seeds";
+import { Rider } from "./rider/entities/rider.entity";
 
 @Injectable()
 export class AppService implements OnApplicationBootstrap {
@@ -14,7 +15,9 @@ export class AppService implements OnApplicationBootstrap {
         @InjectRepository(Restaurant)
         private restaurantRepository: Repository<Restaurant>,
         @InjectRepository(Item)
-        private itemRepository: Repository<Item>
+        private itemRepository: Repository<Item>,
+        @InjectRepository(Rider)
+        private riderRepository: Repository<Rider>
     ) {}
     getHello(): string {
         return "Hello World!";
@@ -23,6 +26,10 @@ export class AppService implements OnApplicationBootstrap {
     async onApplicationBootstrap() {
         if ((await this.userRepository.count()) === 0) {
             await this.userRepository.insert(users);
+        }
+
+        if ((await this.riderRepository.count()) === 0) {
+            await this.riderRepository.insert(riders);
         }
 
         if ((await this.restaurantRepository.count()) === 0) {

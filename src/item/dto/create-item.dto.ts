@@ -1,4 +1,4 @@
-import { IsString, Length } from "class-validator";
+import { IsInt, IsString, Length } from "class-validator";
 
 export class CreateItemDto {
     @IsString()
@@ -11,4 +11,7 @@ export class CreateItemDto {
     @IsString()
     @Length(1)
     nameRestaurant: string;
+
+    @IsInt()
+    preparationTimeMinutes: number;
 }
