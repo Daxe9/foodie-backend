@@ -14,7 +14,6 @@ import { Item } from "./item/entities/item.entity";
 import { RiderModule } from "./rider/rider.module";
 import { Order } from "./order/entities/order.entity";
 import { Rider } from "./rider/entities/rider.entity";
-import { AuthModule } from "./auth/auth.module";
 
 @Module({
     imports: [
@@ -39,8 +38,7 @@ import { AuthModule } from "./auth/auth.module";
         UserModule,
         ItemModule,
         OrderModule,
-        RiderModule,
-        AuthModule
+        RiderModule
     ],
     controllers: [AppController],
     providers: [AppService]

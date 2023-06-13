@@ -1,17 +1,18 @@
 import { Injectable } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
-import { User } from "./entities/user.entity";
+import { User, UserPayload } from "./entities/user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { UtilsService } from "../utils/utils.service";
-import {AuthService} from "../auth/auth.service";
+import * as bcrypt from "bcrypt";
+import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User)
         private userRepository: Repository<User>,
+        private jwtService: JwtService
     ) {}
 
     async insert(createUserDto: CreateUserDto) {
@@ -33,5 +34,38 @@ export class UserService {
 
     remove(id: number) {
         return `This action removes a #${id} user`;
+    }
+
+    async validateUser(email: string, password: string): Promise<UserPayload> {
+        try {
+            // find the user
+            const user: User | null = await this.findOne(email);
+            if (!user) {
+                throw new Error();
+            }
+            // compare password
+            const result = await bcrypt.compare(password, user.password);
+
+            if (result) {
+                // return payload of jwt
+                return {
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email
+                };
+            } else {
+                throw new Error();
+            }
+        } catch (e) {
+            return null;
+        }
+    }
+
+    async login(user: UserPayload): Promise<{
+        accessToken: string;
+    }> {
+        return {
+            accessToken: this.jwtService.sign(user)
+        };
     }
 }

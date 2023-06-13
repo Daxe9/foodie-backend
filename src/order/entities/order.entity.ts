@@ -1,4 +1,4 @@
-import { IsEmail, IsNumber, Length } from "class-validator";
+import { IsNumber, Length } from "class-validator";
 import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "../../user/entities/user.entity";
 

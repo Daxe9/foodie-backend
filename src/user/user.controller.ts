@@ -1,6 +1,5 @@
 import {
     Controller,
-    Get,
     Post,
     Body,
     Patch,
@@ -8,33 +7,27 @@ import {
     Delete,
     Request,
     HttpException,
-    HttpStatus, UseGuards
+    HttpStatus,
+    UseGuards,
+    Get
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UtilsService } from "../utils/utils.service";
-import { JwtService } from "@nestjs/jwt";
-import {LocalAuthGuard} from "../auth/local-auth.guard";
-import {AuthService} from "../auth/auth.service";
+import { LocalAuthGuard } from "./local-auth.guard";
+import { User, UserPayload } from "./entities/user.entity";
+import { JwtAuthGuard } from "../order/jwt-auth.guard";
 
 @Controller("user")
 export class UserController {
     constructor(
         private readonly userService: UserService,
-        private readonly utilsService: UtilsService,
+        private readonly utilsService: UtilsService
     ) {}
 
     @Post("/register")
     async register(@Body() createUserDto: CreateUserDto) {
-        /*
-        - hasUser
-        - all columns in lowercase
-        - password check
-        - hash password
-        - jwt
-         */
-
         // check whether the user is present
         let isPresent = await this.userService.isPresent(createUserDto.email);
         if (isPresent) {
@@ -77,10 +70,13 @@ export class UserController {
                 ...createUserDto,
                 password: hashedPassword
             });
-            const payload = createUserDto;
-            delete payload.password;
+            const payload: UserPayload = {
+                firstName: createUserDto.firstName,
+                lastName: createUserDto.lastName,
+                email: createUserDto.email
+            };
             return {
-                message: `User with email(${createUserDto.email}) is created.`,
+                message: `User with email(${createUserDto.email}) is created.`
             };
         } catch (e: any) {
             return {
@@ -92,7 +88,16 @@ export class UserController {
     @UseGuards(LocalAuthGuard)
     @Post("/login")
     async login(@Request() req) {
-        return req.user;
+        console.log(`User with given email is logged in ${req.user.email}`);
+        return this.userService.login(req.user as UserPayload);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get("/profile")
+    async getProfile(@Request() req) {
+        const user: User = await this.userService.findOne(req.user.email);
+        delete user.password;
+        return user;
     }
 
     @Patch(":id")

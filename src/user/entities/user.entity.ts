@@ -1,13 +1,13 @@
 import { Optional } from "@nestjs/common";
-import {
-    IsEmail,
-    Length,
-    IsInt,
-    IsString,
-    IsMobilePhone
-} from "class-validator";
+import { IsEmail, Length, IsString, IsMobilePhone } from "class-validator";
 import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
 import { Order } from "../../order/entities/order.entity";
+
+export type UserPayload = {
+    firstName: string;
+    lastName: string;
+    email: string;
+};
 
 @Entity()
 export class User {
