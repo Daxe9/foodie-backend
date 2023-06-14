@@ -13,9 +13,7 @@ export class ItemService {
         @InjectRepository(Item)
         private itemRepository: Repository<Item>
     ) {}
-    async save(
-        items: Item[]
-    ): Promise<Item[] | null> {
+    async save(items: Item[]): Promise<Item[] | null> {
         try {
             const result: Item[] = await this.itemRepository.save(items);
             return result;

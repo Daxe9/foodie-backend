@@ -1,4 +1,11 @@
-import { IsNumber, IsString, Length, IsOptional, IsInt } from "class-validator";
+import {
+    IsNumber,
+    IsString,
+    Length,
+    IsOptional,
+    IsInt,
+    IsDecimal
+} from "class-validator";
 import {
     Column,
     Entity,
@@ -34,9 +41,14 @@ export class Item {
     @JoinColumn({
         name: "restaurantName"
     })
-    @IsString()
-    @Length(1)
     restaurant: Restaurant;
+
+    @Column("decimal", {
+        precision: 10,
+        scale: 2
+    })
+    @IsDecimal()
+    price: number;
 
     @ManyToMany(() => Order)
     @JoinTable({

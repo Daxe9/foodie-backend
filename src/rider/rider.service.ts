@@ -11,9 +11,8 @@ import { Rider } from "./entities/rider.entity";
 export class RiderService {
     constructor(
         @InjectRepository(Rider)
-        private riderRepository: Repository<Rider>
-    ) //private jwtService: JwtService
-    {}
+        private riderRepository: Repository<Rider> //private jwtService: JwtService
+    ) {}
     create(createRiderDto: CreateRiderDto) {
         return "This action adds a new rider";
     }

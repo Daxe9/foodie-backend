@@ -86,26 +86,31 @@ export const items = [
     {
         name: "Item A",
         description: "Description A",
+        price: 8.0,
         preparationTimeMinutes: 12
     },
     {
         name: "Item B",
         description: "Description B",
+        price: 10.0,
         preparationTimeMinutes: 5
     },
     {
         name: "Item C",
         description: "Description C",
+        price: 6.5,
         preparationTimeMinutes: 2
     },
     {
         name: "Item D",
         description: "Description D",
+        price: 14.0,
         preparationTimeMinutes: 20
     },
     {
         name: "Item E",
         description: "Description E",
+        price: 20.0,
         preparationTimeMinutes: 10
     }
 ];

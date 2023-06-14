@@ -1,6 +1,6 @@
 import { PartialType } from "@nestjs/mapped-types";
 import { CreateItemDto } from "./create-item.dto";
-import { IsInt, IsString, Length } from "class-validator";
+import { IsDecimal, IsInt, IsString, Length } from "class-validator";
 import { Optional } from "@nestjs/common";
 
 export class UpdateItemDto extends PartialType(CreateItemDto) {
@@ -14,6 +14,9 @@ export class UpdateItemDto extends PartialType(CreateItemDto) {
     @IsString()
     @Length(1)
     nameRestaurant: string;
+
+    @IsDecimal()
+    price: number;
 
     @IsInt()
     preparationTimeMinutes: number;

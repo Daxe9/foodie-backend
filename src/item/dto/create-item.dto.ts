@@ -1,4 +1,4 @@
-import { IsInt, IsString, Length } from "class-validator";
+import { IsDecimal, IsInt, IsString, Length } from "class-validator";
 
 export class CreateItemDto {
     @IsString()
@@ -11,6 +11,9 @@ export class CreateItemDto {
     @IsString()
     @Length(1)
     nameRestaurant: string;
+
+    @IsDecimal()
+    price: number;
 
     @IsInt()
     preparationTimeMinutes: number;

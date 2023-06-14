@@ -5,6 +5,7 @@ import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { Restaurant, RestaurantPayload } from "./entities/restaurant.entity";
 import { CreateRestaurantDto } from "./dto/create-restaurant.dto";
+import { Item } from "../item/entities/item.entity";
 
 @Injectable()
 export class RestaurantService {
@@ -55,6 +56,24 @@ export class RestaurantService {
         } catch (e) {
             return null;
         }
+    }
+
+    async getMenu(restaurantName: string): Promise<Item[] | null> {
+        const restaurant: Restaurant = await this.restaurantRepository.findOne({
+            where: {
+                name: restaurantName
+            },
+            relations: {
+                items: true
+            }
+        });
+
+        // check if the record is present
+        if (!restaurant) {
+            return null;
+        }
+
+        return restaurant.items;
     }
 
     async login(restaurant: RestaurantPayload): Promise<{

@@ -31,7 +31,7 @@ export class UserController {
         // check whether the user is present
         let isPresent = await this.userService.isPresent(createUserDto.email);
         if (isPresent) {
-            return new HttpException(
+            throw new HttpException(
                 {
                     reason: `User with given(${createUserDto.email}) email is already present`
                 },
@@ -53,7 +53,7 @@ export class UserController {
 
         // errors at password validation
         if (!passwordValidationMessage) {
-            return new HttpException(
+            throw new HttpException(
                 {
                     reason: "Password too weak: 'At least 8 characters\\nAt least 1 lowercase letter\\nAt least 1 uppercase letter\\nAt least 1 digit\\nAt least one of these symbols: !@#$%^&*()-,_+.()' "
                 },
@@ -74,9 +74,12 @@ export class UserController {
                 message: `User with email(${createUserDto.email}) is created.`
             };
         } catch (e: any) {
-            return {
-                message: e.message
-            };
+            throw new HttpException(
+                {
+                    reason: e.message
+                },
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
 
