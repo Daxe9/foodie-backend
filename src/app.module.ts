@@ -24,6 +24,7 @@ import { JwtModule } from "@nestjs/jwt";
         }),
         TypeOrmModule.forRootAsync({
             inject: [ConfigService],
+            // add configService in order to get env variables from .env
             useFactory: async (configService: ConfigService) => ({
                 type: "mysql",
                 host: "localhost",

@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
 import { User, UserPayload } from "./entities/user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -15,27 +14,37 @@ export class UserService {
         private jwtService: JwtService
     ) {}
 
+    /**
+     * Method for fast insertion of a single user
+     * @param createUserDto Data Transfer Object for user creation
+     */
     async insert(createUserDto: CreateUserDto) {
         return this.userRepository.insert(createUserDto);
     }
 
+    /**
+     * Return the first user with given email
+     * @param email
+     */
     async findOne(email: string): Promise<User | null> {
         return this.userRepository.findOneBy({ email });
     }
 
+    /**
+     * Check whether a user with given email is present or not
+     * @param email
+     * @return Promise<boolean>
+     */
     async isPresent(email: string): Promise<boolean> {
         const result = await this.userRepository.findOneBy({ email });
         return !!result;
     }
 
-    update(id: number, updateUserDto: UpdateUserDto) {
-        return `This action updates a #${id} user`;
-    }
-
-    remove(id: number) {
-        return `This action removes a #${id} user`;
-    }
-
+    /**
+     * Callback function of LocalStrategy from Passportjs
+     * @param email
+     * @param password
+     */
     async validateUser(email: string, password: string): Promise<UserPayload> {
         try {
             // find the user

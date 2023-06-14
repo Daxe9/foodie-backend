@@ -13,7 +13,6 @@ import {
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
 import { UtilsService } from "../utils/utils.service";
 import { User, UserPayload } from "./entities/user.entity";
 import { JwtAuthGuard } from "../jwt/jwt-auth.guard";
@@ -86,24 +85,16 @@ export class UserController {
     @UseGuards(AuthGuard("user"))
     @Post("/login")
     async login(@Request() req) {
+        // return jwt token
         return this.userService.login(req.user as UserPayload);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get("/profile")
     async getProfile(@Request() req) {
+        // return user record from database deleting password from it
         const user: User = await this.userService.findOne(req.user.email);
         delete user.password;
         return user;
-    }
-
-    @Patch(":id")
-    update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
-        return this.userService.update(+id, updateUserDto);
-    }
-
-    @Delete(":id")
-    remove(@Param("id") id: string) {
-        return this.userService.remove(+id);
     }
 }

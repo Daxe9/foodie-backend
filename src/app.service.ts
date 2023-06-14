@@ -20,9 +20,10 @@ export class AppService implements OnApplicationBootstrap {
         private riderRepository: Repository<Rider>
     ) {}
     getHello(): string {
-        return "Hello World!";
+        return "Welcome To Foodie!";
     }
 
+    // seeding method for database population
     async onApplicationBootstrap() {
         if ((await this.userRepository.count()) === 0) {
             await this.userRepository.insert(users);
