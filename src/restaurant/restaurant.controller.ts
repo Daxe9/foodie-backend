@@ -23,7 +23,6 @@ import * as moment from "moment";
 
 @Controller("restaurant")
 export class RestaurantController {
-    /*
     constructor(
         private readonly restaurantService: RestaurantService,
         private readonly utilsService: UtilsService,
@@ -89,6 +88,7 @@ export class RestaurantController {
         }
     }
 
+    /*
     // @UseGuards(AuthGuard("restaurantStrategy"))
     // @Post("/login")
     // async login(@Request() req) {

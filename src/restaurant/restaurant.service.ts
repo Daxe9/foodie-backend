@@ -6,30 +6,69 @@ import { JwtService } from "@nestjs/jwt";
 import { Restaurant, RestaurantPayload } from "./entities/restaurant.entity";
 import { CreateRestaurantDto } from "./dto/create-restaurant.dto";
 import { Item } from "../item/entities/item.entity";
+import {User} from "../user/entities/user.entity";
+import {Person} from "../person/entities/person.entity";
+import {PersonService} from "../person/person.service";
+
 
 @Injectable()
 export class RestaurantService {
-    /*
+
+
     constructor(
         @InjectRepository(Restaurant)
         private restaurantRepository: Repository<Restaurant>,
+        private personService: PersonService,
         private jwtService: JwtService
     ) {}
 
-    async insert(createRestaurantDto: CreateRestaurantDto) {
-        return this.restaurantRepository.insert(createRestaurantDto);
-    }
+    /**
+     * return the first user with given email
+     * @param email
+     */
     async findOne(email: string): Promise<Restaurant | null> {
-        return this.restaurantRepository.findOneBy({ email });
+        const person: Person | null = await this.personService.findOne(email);
+        if (!Person) {
+            return null;
+        }
+        const restaurant: Restaurant | null = await this.restaurantRepository.findOne({
+            where: {
+                person: person
+            },
+            relations: ["person"]
+        });
+        if (!restaurant) {
+            return null;
+        }
+        return restaurant;
     }
+    async insert(createRestaurantDto: CreateRestaurantDto) {
+        /*
+        const personDto = {
+            email: createRestaurantDto.email,
+            password: createRestaurantDto.password,
+            phone: createRestaurantDto.phone,
+            address: createRestaurantDto.address
+        };
+        const person = await this.personService.save(personDto);
+        const user = this.restaurantRepository.create({
+
+        })
+        user.person = person;
+        return this.userRepository.save(user);
+
+         */
+    }
+
     async save(restaurant: Restaurant) {
         return this.restaurantRepository.save(restaurant);
     }
 
+
     async isPresent(email: string): Promise<boolean> {
-        const result = await this.restaurantRepository.findOneBy({ email });
-        return !!result;
+        return this.personService.isPresent(email);
     }
+
     async validateUser(
         email: string,
         password: string
@@ -41,15 +80,15 @@ export class RestaurantService {
                 throw new Error();
             }
             // compare password
-            const result = await bcrypt.compare(password, restaurant.password);
+            const result = await bcrypt.compare(password, restaurant.person.password);
 
             if (result) {
                 // return payload of jwt
                 return {
                     name: restaurant.name,
-                    address: restaurant.address,
-                    phone: restaurant.phone,
-                    email: restaurant.email
+                    address: restaurant.person.address,
+                    phone: restaurant.person.phone,
+                    email: restaurant.person.email
                 };
             } else {
                 throw new Error();
@@ -85,5 +124,4 @@ export class RestaurantService {
         };
     }
 
-     */
 }

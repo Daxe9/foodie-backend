@@ -47,7 +47,6 @@ export class UserService {
      */
     async findOne(email: string): Promise<User | null> {
         const person: Person | null = await this.personService.findOne(email);
-        console.log(person)
         if (!Person) {
             return null;
         }
@@ -57,7 +56,6 @@ export class UserService {
             },
             relations: ["person"]
         });
-        console.log(user)
         if (!user) {
             return null;
         }
@@ -70,11 +68,8 @@ export class UserService {
      * @param password
      */
     async validateUser(email: string, password: string): Promise<UserPayload> {
-        console.log("start validating")
         try {
-            // find the user
             const user: User | null = await this.findOne(email);
-            console.log(user)
             if (!user) {
                 throw new Error();
             }

@@ -10,6 +10,9 @@ import { Restaurant } from "./entities/restaurant.entity";
 import { ItemModule } from "../item/item.module";
 import { ItemService } from "../item/item.service";
 import { Item } from "../item/entities/item.entity";
+import {Person} from "../person/entities/person.entity";
+import {PersonModule} from "../person/person.module";
+import {PersonService} from "../person/person.service";
 
 @Module({
     imports: [
@@ -24,9 +27,10 @@ import { Item } from "../item/entities/item.entity";
                 }
             })
         }),
-        TypeOrmModule.forFeature([Restaurant, Item])
+        TypeOrmModule.forFeature([Restaurant, Item, Person]),
+        PersonModule
     ],
     controllers: [RestaurantController],
-    providers: [RestaurantService, LocalStrategy, ItemService]
+    providers: [RestaurantService, LocalStrategy, ItemService, PersonService]
 })
 export class RestaurantModule {}
