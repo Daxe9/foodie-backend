@@ -5,7 +5,10 @@ import { RestaurantService } from "./restaurant.service";
 import { RestaurantPayload } from "./entities/restaurant.entity";
 
 @Injectable()
-export class LocalStrategy extends PassportStrategy(Strategy, "restaurant") {
+export class LocalStrategy extends PassportStrategy(
+    Strategy,
+    "restaurantStrategy"
+) {
     constructor(private restaurantService: RestaurantService) {
         super({
             usernameField: "email",
@@ -16,7 +19,10 @@ export class LocalStrategy extends PassportStrategy(Strategy, "restaurant") {
     async validate(
         email: string,
         password: string
-    ): Promise<RestaurantPayload> {
+    ): /*Promise<RestaurantPayload>*/ Promise<null> {
+        console.log("from restaurant")
+        return null;
+        /*
         const restaurant = await this.restaurantService.validateUser(
             email,
             password
@@ -25,5 +31,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, "restaurant") {
             throw new UnauthorizedException();
         }
         return restaurant;
+
+         */
     }
 }

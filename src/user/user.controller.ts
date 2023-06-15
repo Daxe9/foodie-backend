@@ -82,7 +82,7 @@ export class UserController {
         }
     }
 
-    @UseGuards(AuthGuard("user"))
+    @UseGuards(AuthGuard("userStrategy"))
     @Post("/login")
     async login(@Request() req) {
         // return jwt token
@@ -94,7 +94,7 @@ export class UserController {
     async getProfile(@Request() req) {
         // return user record from database deleting password from it
         const user: User = await this.userService.findOne(req.user.email);
-        delete user.password;
+        delete user.person.password;
         return user;
     }
 }

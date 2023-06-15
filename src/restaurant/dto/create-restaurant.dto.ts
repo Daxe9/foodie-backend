@@ -20,5 +20,4 @@ export class CreateRestaurantDto {
 
     @IsMobilePhone("it-IT")
     phone: string;
-
 }

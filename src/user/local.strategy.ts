@@ -5,7 +5,7 @@ import { UserService } from "./user.service";
 import { UserPayload } from "./entities/user.entity";
 
 @Injectable()
-export class LocalStrategy extends PassportStrategy(Strategy, "user") {
+export class LocalStrategy extends PassportStrategy(Strategy, "userStrategy") {
     constructor(private userService: UserService) {
         super({
             usernameField: "email",
@@ -14,6 +14,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, "user") {
     }
 
     async validate(email: string, password: string): Promise<UserPayload> {
+        console.log("from user")
         const user = await this.userService.validateUser(email, password);
         if (!user) {
             throw new UnauthorizedException();

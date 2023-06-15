@@ -23,6 +23,7 @@ import * as moment from "moment";
 
 @Controller("restaurant")
 export class RestaurantController {
+    /*
     constructor(
         private readonly restaurantService: RestaurantService,
         private readonly utilsService: UtilsService,
@@ -88,88 +89,89 @@ export class RestaurantController {
         }
     }
 
-    @UseGuards(AuthGuard("restaurant"))
-    @Post("/login")
-    async login(@Request() req) {
-        return this.restaurantService.login(req.user as RestaurantPayload);
-    }
+    // @UseGuards(AuthGuard("restaurantStrategy"))
+    // @Post("/login")
+    // async login(@Request() req) {
+    //     return this.restaurantService.login(req.user as RestaurantPayload);
+    // }
+    //
+    // @UseGuards(JwtAuthGuard)
+    // @Get("/profile")
+    // async getProfile(@Request() req) {
+    //     const restaurant: Restaurant = await this.restaurantService.findOne(
+    //         req.user.email
+    //     );
+    //     delete restaurant.password;
+    //     return restaurant;
+    // }
 
-    @UseGuards(JwtAuthGuard)
-    @Get("/profile")
-    async getProfile(@Request() req) {
-        const restaurant: Restaurant = await this.restaurantService.findOne(
-            req.user.email
-        );
-        delete restaurant.password;
-        return restaurant;
-    }
+    // @UseGuards(JwtAuthGuard)
+    // @Patch("/updateMenu")
+    // async addItems(@Request() req, @Body() updateItemsDto: UpdateItemsDto) {
+    //     const restaurant: Restaurant = await this.restaurantService.findOne(
+    //         req.user.email
+    //     );
+    //     if (!restaurant) {
+    //         throw new HttpException(
+    //             "No restaurant found",
+    //             HttpStatus.NOT_FOUND
+    //         );
+    //     }
+    //
+    //     // if it is one item then convert it to a list of items
+    //     let temp = updateItemsDto.items;
+    //     temp.forEach((item: CreateItemDto) => {
+    //         if (item.preparationTimeMinutes < 1)
+    //             throw new HttpException(
+    //                 "Preparation time field should be an integer",
+    //                 HttpStatus.BAD_REQUEST
+    //             );
+    //     });
+    //
+    //     // create entities
+    //     const items: Item[] = this.itemService.create(temp);
+    //     const menu = await this.restaurantService.getMenu(restaurant.name);
+    //
+    //     // filter items that are not in the menu to avoid having duplicates
+    //     const filteredItems: Item[] = items.filter(
+    //         (item) => !menu.some((menuItem) => menuItem.name === item.name)
+    //     );
+    //
+    //     // establish relation
+    //     filteredItems.forEach((item: Item) => {
+    //         item.restaurant = restaurant;
+    //     });
+    //     try {
+    //         await this.itemService.save(filteredItems);
+    //         await this.restaurantService.save(restaurant);
+    //     } catch (e) {
+    //         console.log(e.message)
+    //     }
+    //
+    //     return filteredItems;
+    // }
+    //
+    // @Get("/menu")
+    // async getMenu(@Body("restaurantName") name: string) {
+    //     if (!name) {
+    //         throw new HttpException(
+    //             "Missing restaurantName field",
+    //             HttpStatus.BAD_REQUEST
+    //         );
+    //     }
+    //
+    //     const menu: Item[] | null = await this.restaurantService.getMenu(name);
+    //     if (menu === null) {
+    //         throw new HttpException(
+    //             "Restaurant Not Found",
+    //             HttpStatus.NOT_FOUND
+    //         );
+    //     }
+    //
+    //     console.log(moment().format("dddd h:mm"));
+    //
+    //     return menu;
+    // }
 
-    @UseGuards(JwtAuthGuard)
-    @Patch("/updateMenu")
-    async addItems(@Request() req, @Body() updateItemsDto: UpdateItemsDto) {
-        const restaurant: Restaurant = await this.restaurantService.findOne(
-            req.user.email
-        );
-        if (!restaurant) {
-            throw new HttpException(
-                "No restaurant found",
-                HttpStatus.NOT_FOUND
-            );
-        }
-
-        // if it is one item then convert it to a list of items
-        let temp = updateItemsDto.items;
-        if (!Array.isArray(temp)) {
-            temp = [temp];
-        }
-
-        temp.forEach((item: CreateItemDto) => {
-            if (item.preparationTimeMinutes < 1)
-                throw new HttpException(
-                    "Preparation time field should be an integer",
-                    HttpStatus.BAD_REQUEST
-                );
-        });
-
-        // create entities
-        const items: Item[] = this.itemService.create(temp);
-        const menu = await this.restaurantService.getMenu(restaurant.name);
-
-        // filter items that are not in the menu to avoid having duplicates
-        const filteredItems: Item[] = items.filter(
-            (item) => !menu.some((menuItem) => menuItem.name === item.name)
-        );
-
-        // establish relation
-        filteredItems.forEach((item: Item) => {
-            item.restaurant = restaurant;
-        });
-
-        await this.itemService.save(filteredItems);
-        await this.restaurantService.save(restaurant);
-
-        return filteredItems;
-    }
-
-    @Get("/menu")
-    async getMenu(@Body("restaurantName") name: string) {
-        if (!name) {
-            throw new HttpException(
-                "Missing restaurantName field",
-                HttpStatus.BAD_REQUEST
-            );
-        }
-
-        const menu: Item[] | null = await this.restaurantService.getMenu(name);
-        if (menu === null) {
-            throw new HttpException(
-                "Restaurant Not Found",
-                HttpStatus.NOT_FOUND
-            );
-        }
-
-        console.log(moment().format("dddd h:mm"));
-
-        return menu;
-    }
+     */
 }

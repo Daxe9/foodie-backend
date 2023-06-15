@@ -1,22 +1,25 @@
-import { Entity, Column, PrimaryColumn } from "typeorm";
+import {
+    Entity,
+    Column,
+    PrimaryColumn,
+    OneToMany,
+    OneToOne,
+    JoinColumn,
+    PrimaryGeneratedColumn
+} from "typeorm";
 import { IsEmail, IsMobilePhone, IsString } from "class-validator";
+import { Order } from "../../order/entities/order.entity";
+import { Person } from "../../person/entities/person.entity";
 
 @Entity()
 export class Rider {
-    @PrimaryColumn()
-    @IsEmail()
-    email: string;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-    @Column()
-    password: string;
+    @OneToOne(() => Person)
+    @JoinColumn()
+    person: Person;
 
-    @Column({
-        length: 15
-    })
-    @IsMobilePhone("it-IT")
-    phone: string;
-
-    @Column()
-    @IsString()
-    workingSite: string;
+    @OneToMany(() => Order, (order) => order.rider)
+    orders: Order[];
 }

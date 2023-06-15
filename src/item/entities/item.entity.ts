@@ -39,7 +39,7 @@ export class Item {
 
     @ManyToOne(() => Restaurant, (restaurant) => restaurant.items)
     @JoinColumn({
-        name: "restaurantName"
+        name: "restaurantId"
     })
     restaurant: Restaurant;
 

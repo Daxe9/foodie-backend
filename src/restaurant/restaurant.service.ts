@@ -9,6 +9,7 @@ import { Item } from "../item/entities/item.entity";
 
 @Injectable()
 export class RestaurantService {
+    /*
     constructor(
         @InjectRepository(Restaurant)
         private restaurantRepository: Repository<Restaurant>,
@@ -83,4 +84,6 @@ export class RestaurantService {
             accessToken: this.jwtService.sign(restaurant)
         };
     }
+
+     */
 }

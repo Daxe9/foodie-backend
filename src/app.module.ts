@@ -9,13 +9,16 @@ import { DataSource } from "typeorm";
 import { User } from "./user/entities/user.entity";
 import { ItemModule } from "./item/item.module";
 import { OrderModule } from "./order/order.module";
-import { Restaurant } from "./restaurant/entities/restaurant.entity";
+import {Restaurant, SingleTime, Timetable} from "./restaurant/entities/restaurant.entity";
 import { Item } from "./item/entities/item.entity";
 import { RiderModule } from "./rider/rider.module";
 import { Order } from "./order/entities/order.entity";
 import { Rider } from "./rider/entities/rider.entity";
 import { UtilsModule } from "./utils/utils.module";
 import { JwtModule } from "@nestjs/jwt";
+import { CreateTables1686815288244 } from "../migrations/1686815288244-CreateTables";
+import { PersonModule } from "./person/person.module";
+import { Person } from "./person/entities/person.entity";
 
 @Module({
     imports: [
@@ -32,18 +35,18 @@ import { JwtModule } from "@nestjs/jwt";
                 database: "FOODIE_DEV",
                 username: configService.get<string>("DATABASE_USER") || "",
                 password: configService.get<string>("DATABASE_PASSWORD") || "",
-                entities: [User, Restaurant, Item, Order, Rider],
-                synchronize: false
+                entities: [User, Restaurant, Item, Order, Rider, Person, Timetable, SingleTime]
             })
         }),
-        TypeOrmModule.forFeature([User, Restaurant, Item, Rider]),
+        TypeOrmModule.forFeature([User]),
         RestaurantModule,
         UserModule,
         UtilsModule,
         ItemModule,
         OrderModule,
         RiderModule,
-        JwtModule
+        JwtModule,
+        PersonModule
     ],
     controllers: [AppController],
     providers: [AppService]

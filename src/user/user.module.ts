@@ -9,11 +9,14 @@ import { ConfigService } from "@nestjs/config";
 import { JwtStrategy } from "../jwt/jwt.strategy";
 import { PassportModule } from "@nestjs/passport";
 import { CustomJwtModule } from "../jwt/jwt.module";
+import { PersonModule } from "../person/person.module";
+import { PersonService } from "../person/person.service";
+import { Person } from "../person/entities/person.entity";
 
 @Module({
     imports: [
         CustomJwtModule,
-        TypeOrmModule.forFeature([User]),
+        TypeOrmModule.forFeature([User, Person]),
         PassportModule,
         JwtModule.registerAsync({
             inject: [ConfigService],
@@ -23,9 +26,10 @@ import { CustomJwtModule } from "../jwt/jwt.module";
                     expiresIn: "1h"
                 }
             })
-        })
+        }),
+        PersonModule
     ],
     controllers: [UserController],
-    providers: [UserService, LocalStrategy, JwtStrategy]
+    providers: [UserService, LocalStrategy, JwtStrategy, PersonService]
 })
 export class UserModule {}

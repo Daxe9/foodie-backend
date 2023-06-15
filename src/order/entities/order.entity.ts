@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import { User } from "../../user/entities/user.entity";
 import { Item } from "../../item/entities/item.entity";
+import { Rider } from "../../rider/entities/rider.entity";
 
 @Entity()
 export class Order {
@@ -25,7 +26,9 @@ export class Order {
     @ManyToMany(() => Item)
     items: Item[];
 
-    // TODO: add rider references
-    // @IsNumber()
-    // riderId: number;
+    @ManyToOne(() => User, (user) => user.orders)
+    @JoinColumn({
+        name: "riderEmail"
+    })
+    rider: Rider;
 }
