@@ -27,21 +27,21 @@ export type RestaurantPayload = {
 };
 
 @Entity()
-export class SingleTime {
+export class SingleDay {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column("time", { nullable: true })
     @IsString()
     opening1: string;
-    @Column()
+    @Column("time", { nullable: true })
     @IsString()
     opening2: string;
 
-    @Column()
+    @Column("time", { nullable: true })
     @IsString()
     closing1: string;
-    @Column()
+    @Column("time", { nullable: true })
     @IsString()
     closing2: string;
 }
@@ -51,27 +51,27 @@ export class Timetable {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToOne(() => SingleTime)
+    @OneToOne(() => SingleDay)
     @JoinColumn()
-    monday: SingleTime;
-    @OneToOne(() => SingleTime)
+    monday: SingleDay;
+    @OneToOne(() => SingleDay)
     @JoinColumn()
-    tuesday: SingleTime;
-    @OneToOne(() => SingleTime)
+    tuesday: SingleDay;
+    @OneToOne(() => SingleDay)
     @JoinColumn()
-    wednesday: SingleTime;
-    @OneToOne(() => SingleTime)
+    wednesday: SingleDay;
+    @OneToOne(() => SingleDay)
     @JoinColumn()
-    thursday: SingleTime;
-    @OneToOne(() => SingleTime)
+    thursday: SingleDay;
+    @OneToOne(() => SingleDay)
     @JoinColumn()
-    friday: SingleTime;
-    @OneToOne(() => SingleTime)
+    friday: SingleDay;
+    @OneToOne(() => SingleDay)
     @JoinColumn()
-    saturday: SingleTime;
-    @OneToOne(() => SingleTime)
+    saturday: SingleDay;
+    @OneToOne(() => SingleDay)
     @JoinColumn()
-    sunday: SingleTime;
+    sunday: SingleDay;
 }
 
 @Entity()

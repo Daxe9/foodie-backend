@@ -3,8 +3,8 @@ import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
-import { Restaurant, RestaurantPayload } from "./entities/restaurant.entity";
-import { CreateRestaurantDto } from "./dto/create-restaurant.dto";
+import {Restaurant, RestaurantPayload, SingleDay, Timetable} from "./entities/restaurant.entity";
+import {CreateRestaurantDto, SingleDay as SingleDayDto} from "./dto/create-restaurant.dto";
 import { Item } from "../item/entities/item.entity";
 import {User} from "../user/entities/user.entity";
 import {Person} from "../person/entities/person.entity";
@@ -18,6 +18,10 @@ export class RestaurantService {
     constructor(
         @InjectRepository(Restaurant)
         private restaurantRepository: Repository<Restaurant>,
+        @InjectRepository(SingleDay)
+        private singleTimeRepository: Repository<SingleDay>,
+        @InjectRepository(Timetable)
+        private timetableRepository: Repository<Timetable>,
         private personService: PersonService,
         private jwtService: JwtService
     ) {}
@@ -28,7 +32,7 @@ export class RestaurantService {
      */
     async findOne(email: string): Promise<Restaurant | null> {
         const person: Person | null = await this.personService.findOne(email);
-        if (!Person) {
+        if (!person) {
             return null;
         }
         const restaurant: Restaurant | null = await this.restaurantRepository.findOne({
@@ -43,7 +47,6 @@ export class RestaurantService {
         return restaurant;
     }
     async insert(createRestaurantDto: CreateRestaurantDto) {
-        /*
         const personDto = {
             email: createRestaurantDto.email,
             password: createRestaurantDto.password,
@@ -51,13 +54,26 @@ export class RestaurantService {
             address: createRestaurantDto.address
         };
         const person = await this.personService.save(personDto);
-        const user = this.restaurantRepository.create({
+        const timetableTemp = createRestaurantDto.timetable;
+        const dayTimes: SingleDay[] = [];
+        for (let day in timetableTemp) {
+            const dayTime = await this.singleTimeRepository.save(timetableTemp[day])
+            dayTimes.push(dayTime);
+        }
+        const timetable = await this.timetableRepository.save({
+            monday: dayTimes[0],
+            tuesday: dayTimes[1],
+            wednesday: dayTimes[2],
+            thursday: dayTimes[3],
+            friday: dayTimes[4],
+            saturday: dayTimes[5],
+            sunday: dayTimes[6]
+        });
 
+        return this.restaurantRepository.save({
+            name: createRestaurantDto.name,
+            timetable: timetable,
         })
-        user.person = person;
-        return this.userRepository.save(user);
-
-         */
     }
 
     async save(restaurant: Restaurant) {

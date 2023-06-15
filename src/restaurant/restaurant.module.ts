@@ -6,7 +6,7 @@ import { PassportModule } from "@nestjs/passport";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Restaurant } from "./entities/restaurant.entity";
+import {Restaurant, SingleDay, Timetable} from "./entities/restaurant.entity";
 import { ItemModule } from "../item/item.module";
 import { ItemService } from "../item/item.service";
 import { Item } from "../item/entities/item.entity";
@@ -27,7 +27,7 @@ import {PersonService} from "../person/person.service";
                 }
             })
         }),
-        TypeOrmModule.forFeature([Restaurant, Item, Person]),
+        TypeOrmModule.forFeature([Restaurant, Item, Person, Timetable, SingleDay]),
         PersonModule
     ],
     controllers: [RestaurantController],

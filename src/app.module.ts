@@ -9,7 +9,7 @@ import { DataSource } from "typeorm";
 import { User } from "./user/entities/user.entity";
 import { ItemModule } from "./item/item.module";
 import { OrderModule } from "./order/order.module";
-import {Restaurant, SingleTime, Timetable} from "./restaurant/entities/restaurant.entity";
+import {Restaurant, SingleDay, Timetable} from "./restaurant/entities/restaurant.entity";
 import { Item } from "./item/entities/item.entity";
 import { RiderModule } from "./rider/rider.module";
 import { Order } from "./order/entities/order.entity";
@@ -35,7 +35,7 @@ import { Person } from "./person/entities/person.entity";
                 database: "FOODIE_DEV",
                 username: configService.get<string>("DATABASE_USER") || "",
                 password: configService.get<string>("DATABASE_PASSWORD") || "",
-                entities: [User, Restaurant, Item, Order, Rider, Person, Timetable, SingleTime]
+                entities: [User, Restaurant, Item, Order, Rider, Person, Timetable, SingleDay]
             })
         }),
         TypeOrmModule.forFeature([User]),

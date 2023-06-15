@@ -38,7 +38,7 @@ export class UserController {
             );
         }
 
-        // convert columns in lower case except for password
+        // TODO: convert columns in lower case except for password, not working rn
         const pwTemp = createUserDto.password;
         for (let property in createUserDto) {
             property = property.toLowerCase();
