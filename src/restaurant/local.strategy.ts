@@ -28,6 +28,5 @@ export class LocalStrategy extends PassportStrategy(
             throw new UnauthorizedException();
         }
         return restaurant;
-
     }
 }

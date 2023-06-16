@@ -35,7 +35,10 @@ export class RestaurantService {
      * return the first user with given email
      * @param email
      */
-    async findOne(email: string, relations: string[]): Promise<Restaurant | null> {
+    async findOne(
+        email: string,
+        relations: string[]
+    ): Promise<Restaurant | null> {
         const person: Person | null = await this.personService.findOne(email);
         if (!person) {
             return null;
@@ -94,6 +97,7 @@ export class RestaurantService {
         let restaurant: Restaurant = this.restaurantRepository.create({
             name: createRestaurantDto.name,
             url: createRestaurantDto.url,
+            category: createRestaurantDto.category
         });
         // await queryRunner.startTransaction();
         try {
@@ -120,7 +124,7 @@ export class RestaurantService {
 
             await queryRunner.commitTransaction();
         } catch (e) {
-            throw new Error(e.message)
+            throw new Error(e.message);
             await queryRunner.rollbackTransaction();
         } finally {
             await queryRunner.release();
@@ -166,7 +170,9 @@ export class RestaurantService {
     ): Promise<RestaurantPayload> {
         try {
             // find the user
-            const restaurant: Restaurant | null = await this.findOne(email, ["person"]);
+            const restaurant: Restaurant | null = await this.findOne(email, [
+                "person"
+            ]);
             if (!restaurant) {
                 throw new Error();
             }

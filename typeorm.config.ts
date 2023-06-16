@@ -23,5 +23,5 @@ export default new DataSource({
     password: configService.get('DATABASE_PASSWORD'),
     database: configService.get('DATABASE_NAME'),
     entities: [Person, Timetable, SingleDay, User, Item, Restaurant, Order, Rider],
-    migrations: [CreateTables1686815288244]
+    migrations: [CreateTables1686815288244],
 });

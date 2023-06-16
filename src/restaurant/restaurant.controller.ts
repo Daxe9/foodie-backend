@@ -109,7 +109,8 @@ export class RestaurantController {
     @Patch("/updateMenu")
     async addItems(@Request() req, @Body() updateItemsDto: UpdateItemsDto) {
         const restaurant: Restaurant = await this.restaurantService.findOne(
-            req.user.email, []
+            req.user.email,
+            []
         );
         if (!restaurant) {
             throw new HttpException(
@@ -144,9 +145,12 @@ export class RestaurantController {
         let updatedItems: Item[];
         try {
             // transaction
-            updatedItems = await this.restaurantService.updateMenu(restaurant, filteredItems);
+            updatedItems = await this.restaurantService.updateMenu(
+                restaurant,
+                filteredItems
+            );
         } catch (e) {
-            console.log(e.message)
+            console.log(e.message);
             throw new HttpException(
                 "Error while updating menu",
                 HttpStatus.INTERNAL_SERVER_ERROR
@@ -173,14 +177,13 @@ export class RestaurantController {
             );
         }
 
-
         return menu;
     }
 
     @Get("/all")
     async findAll() {
-        const restaurants: Restaurant[] = await this.restaurantService.findAll();
+        const restaurants: Restaurant[] =
+            await this.restaurantService.findAll();
         return restaurants;
     }
-
 }

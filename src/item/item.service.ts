@@ -25,4 +25,21 @@ export class ItemService {
     create(createItemDto: CreateItemDto[]): Item[] {
         return this.itemRepository.create(createItemDto);
     }
+
+    // get a list of item based in array of id in input
+    async getItems(itemsId: number[]): Promise<Item[]> {
+        const items: Item[] = [];
+        for (const id of itemsId) {
+            const item: Item | null = await this.itemRepository.findOne({
+                where: {
+                    id
+                },
+                relations: ["restaurant"]
+            });
+            if (item) {
+                items.push(item);
+            }
+        }
+        return items;
+    }
 }

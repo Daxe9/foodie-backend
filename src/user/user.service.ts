@@ -99,4 +99,5 @@ export class UserService {
             accessToken: this.jwtService.sign(user)
         };
     }
+
 }

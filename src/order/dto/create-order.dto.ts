@@ -1,17 +1,19 @@
-import {IsDecimal, IsMobilePhone, IsString, ValidateNested} from "class-validator";
+import {
+    IsDecimal,
+    IsMobilePhone, IsNumber,
+    IsString,
+    ValidateNested
+} from "class-validator";
 
 export class CreateOrderDto {
     @IsString()
     address: string;
 
-    @IsDecimal()
-    total: number;
-
     @IsMobilePhone("it-IT")
     phone: string;
 
-    @ValidateNested({
+    @IsNumber({}, {
         each: true
     })
-    itemsId: number[]
+    itemsId: number[];
 }

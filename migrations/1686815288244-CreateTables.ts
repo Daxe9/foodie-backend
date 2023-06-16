@@ -54,6 +54,7 @@ export class CreateTables1686815288244 implements MigrationInterface {
 \t\`id\` INT AUTO_INCREMENT NOT NULL,
 \t\`name\` VARCHAR(255) NOT NULL UNIQUE,
 \t\`url\` VARCHAR(2048) NOT NULL UNIQUE,
+\t\`category\` VARCHAR(255) NOT NULL UNIQUE,
 \t\`personId\` INT NOT NULL,
 \t\`timetableId\` INT,
 \tCONSTRAINT \`FK_restaurant_person\` FOREIGN KEY (\`personId\`) REFERENCES \`person\` (\`id\`),
@@ -82,17 +83,18 @@ export class CreateTables1686815288244 implements MigrationInterface {
 \t\`address\` VARCHAR(255) NOT NULL,
 \t\`phone\` VARCHAR(15) NOT NULL,
 \t\`total\` DECIMAL(10, 2) NOT NULL,
-\t\`userEmail\`  VARCHAR(255) NOT NULL, 
-\t\`riderEmail\` VARCHAR(255) NOT NULL, 
+\t\`userId\`  INT NOT NULL, 
+\t\`riderId\` INT NULL, 
     PRIMARY KEY (\`id\`), 
-\tCONSTRAINT \`FK_order_userEmail\` FOREIGN KEY (\`userEmail\`) REFERENCES \`person\` (\`email\`), 
-\tCONSTRAINT \`FK_order_riderEmail\` FOREIGN KEY (\`riderEmail\`) REFERENCES \`person\` (\`email\`) 
+\tCONSTRAINT \`FK_order_userId\` FOREIGN KEY (\`userId\`) REFERENCES \`user\` (\`id\`), 
+\tCONSTRAINT \`FK_order_riderId\` FOREIGN KEY (\`riderId\`) REFERENCES \`rider\` (\`id\`) 
 );
 `)
         await queryRunner.query(`CREATE TABLE \`itemOrder\` ( 
+\t\`id\` INT NOT NULL AUTO_INCREMENT,
 \t\`itemId\` INT NOT NULL, 
 \t\`orderId\` INT NOT NULL, 
-\tPRIMARY KEY (\`itemId\`, \`orderId\`), 
+\tPRIMARY KEY (\`id\`), 
 \tCONSTRAINT \`FK_itemOrder_itemId\` FOREIGN KEY (\`itemId\`) REFERENCES \`item\` (\`id\`), 
 \tCONSTRAINT \`FK_itemOrder_orderId\` FOREIGN KEY (\`orderId\`) REFERENCES \`order\` (\`id\`) 
 ); 

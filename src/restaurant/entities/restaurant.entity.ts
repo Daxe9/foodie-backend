@@ -30,6 +30,10 @@ export class Restaurant {
 
     @Column()
     @Length(2, 255)
+    category: string;
+
+    @Column()
+    @Length(2, 255)
     name: string;
 
     @OneToMany(() => Item, (item) => item.restaurant)

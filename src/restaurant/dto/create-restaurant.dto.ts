@@ -39,6 +39,10 @@ export class CreateRestaurantDto {
     name: string;
 
     @IsString()
+    @Length(2, 255)
+    category: string;
+
+    @IsString()
     @Length(0, 2048)
     url: string;
 

@@ -1,4 +1,4 @@
-import {IsDecimal, IsNumber, IsString, Length} from "class-validator";
+import { IsDecimal, IsNumber, IsString, Length } from "class-validator";
 import {
     Column,
     Entity,
@@ -21,7 +21,7 @@ export class Order {
         nullable: false
     })
     @IsNumber()
-    address: string
+    address: string;
 
     @Column("decimal", {
         nullable: false,
@@ -40,7 +40,7 @@ export class Order {
 
     @ManyToOne(() => User, (user) => user.orders)
     @JoinColumn({
-        name: "userEmail"
+        name: "userId"
     })
     @Length(1)
     user: User;
@@ -48,9 +48,9 @@ export class Order {
     @ManyToMany(() => Item)
     items: Item[];
 
-    @ManyToOne(() => User, (user) => user.orders)
+    @ManyToOne(() => Rider, (rider) => rider.orders)
     @JoinColumn({
-        name: "riderEmail"
+        name: "riderId"
     })
     rider: Rider;
 }

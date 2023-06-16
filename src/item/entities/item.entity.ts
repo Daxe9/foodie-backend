@@ -54,11 +54,11 @@ export class Item {
     @JoinTable({
         name: "itemOrder",
         joinColumn: {
-            name: "item",
+            name: "itemId",
             referencedColumnName: "id"
         },
         inverseJoinColumn: {
-            name: "order",
+            name: "orderId",
             referencedColumnName: "id"
         }
     })

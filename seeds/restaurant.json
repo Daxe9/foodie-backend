@@ -2,6 +2,7 @@
   {
   "name": "La casa dei proci",
   "url": "https://cdn.cloudflare.com/procio",
+  "category": "Italian",
   "email": "casa@proci.com",
   "password": "Wlatopa!1!",
   "phone": "3392361538",
@@ -53,6 +54,7 @@
   },
   {
     "name": "Il salotto gargantuesco",
+    "category": "Finnish",
     "url": "https://cdn.cloudflare.com/salotto",
     "email": "salotto@gargantuesco.com",
     "password": "Cipiacegrosso1!",
