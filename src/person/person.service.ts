@@ -11,8 +11,12 @@ export class PersonService {
         private personRepository: Repository<Person>
     ) {}
 
-    async create(createPersonDto: CreatePersonDto) {
+    async insert(createPersonDto: CreatePersonDto) {
         return this.personRepository.insert(createPersonDto);
+    }
+
+    create(createPersonDto: CreatePersonDto) {
+        return this.personRepository.create(createPersonDto);
     }
 
     /**

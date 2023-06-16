@@ -1,5 +1,5 @@
-import {IsMobilePhone, IsOptional, IsString, Length} from "class-validator";
-import {Type} from "class-transformer";
+import { IsMobilePhone, IsOptional, IsString, Length } from "class-validator";
+import { Type } from "class-transformer";
 
 export class SingleDay {
     @IsString()
@@ -37,6 +37,10 @@ export class CreateRestaurantDto {
     @IsString()
     @Length(2, 255)
     name: string;
+
+    @IsString()
+    @Length(0, 2048)
+    url: string;
 
     @IsString()
     @Length(1)

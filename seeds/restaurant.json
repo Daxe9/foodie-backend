@@ -1,0 +1,106 @@
+[
+  {
+  "name": "La casa dei proci",
+  "url": "https://cdn.cloudflare.com/procio",
+  "email": "casa@proci.com",
+  "password": "Wlatopa!1!",
+  "phone": "3392361538",
+  "address": "via di itaca 91",
+  "timetable": {
+    "monday": {
+      "opening1": "12:00",
+      "closing1": "15:00",
+      "opening2": "19:00",
+      "closing2": "23:00"
+    },
+    "tuesday": {
+      "opening1": "12:00",
+      "closing1": "15:00",
+      "opening2": "19:00",
+      "closing2": "23:00"
+    },
+    "wednesday": {
+      "opening1": "12:00",
+      "closing1": "15:00",
+      "opening2": "19:00",
+      "closing2": "23:00"
+    },
+    "thursday": {
+      "opening1": "12:00",
+      "closing1": "15:00",
+      "opening2": "19:00",
+      "closing2": "23:00"
+    },
+    "friday": {
+      "opening1": "12:00",
+      "closing1": "15:00",
+      "opening2": "19:00",
+      "closing2": "23:00"
+    },
+    "saturday": {
+      "opening1": "12:00",
+      "closing1": "15:00",
+      "opening2": "19:00",
+      "closing2": "23:00"
+    },
+    "sunday": {
+      "opening1": "12:00",
+      "closing1": "15:00",
+      "opening2": "19:00",
+      "closing2": "23:00"
+    }
+  }
+  },
+  {
+    "name": "Il salotto gargantuesco",
+    "url": "https://cdn.cloudflare.com/salotto",
+    "email": "salotto@gargantuesco.com",
+    "password": "Cipiacegrosso1!",
+    "phone": "3386615288",
+    "address": "via roma 17",
+    "timetable": {
+      "monday": {
+        "opening1": null,
+        "closing1": null,
+        "opening2": null,
+        "closing2": null
+      },
+      "tuesday": {
+        "opening1": "9:00",
+        "closing1": "15:00",
+        "opening2": "18:00",
+        "closing2": "23:00"
+      },
+      "wednesday": {
+        "opening1": "9:00",
+        "closing1": "15:00",
+        "opening2": "18:00",
+        "closing2": "23:00"
+      },
+      "thursday": {
+        "opening1": "9:00",
+        "closing1": "15:00",
+        "opening2": "18:00",
+        "closing2": "23:00"
+      },
+      "friday": {
+        "opening1": "12:00",
+        "closing1": "15:00",
+        "opening2": "19:00",
+        "closing2": "23:00"
+      },
+      "saturday": {
+        "opening1": "18:00",
+        "closing1": "23:00",
+        "opening2": null,
+        "closing2": null
+      },
+      "sunday": {
+        "opening1": "9:00",
+        "closing1": "15:00",
+        "opening2": null,
+        "closing2": null
+      }
+    }
+  }
+]

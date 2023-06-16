@@ -31,8 +31,8 @@ export class UserService {
         const person = await this.personService.save(personDto);
         const user = this.userRepository.create({
             firstName: createUserDto.firstName,
-            lastName: createUserDto.lastName,
-        })
+            lastName: createUserDto.lastName
+        });
         user.person = person;
         return this.userRepository.save(user);
     }

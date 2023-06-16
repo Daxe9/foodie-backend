@@ -11,9 +11,8 @@ import { Rider } from "./rider/entities/rider.entity";
 export class AppService implements OnApplicationBootstrap {
     constructor(
         @InjectRepository(User)
-        private userRepository: Repository<User> // @InjectRepository(Restaurant)
-    ) // private restaurantRepository: Repository<Restaurant>,
-    // @InjectRepository(Item)
+        private userRepository: Repository<User> // @InjectRepository(Restaurant) // private restaurantRepository: Repository<Restaurant>,
+    ) // @InjectRepository(Item)
     // private itemRepository: Repository<Item>,
     // @InjectRepository(Rider)
     // private riderRepository: Repository<Rider>
@@ -29,7 +28,6 @@ export class AppService implements OnApplicationBootstrap {
         // if ((await this.userRepository.count()) === 0) {
         //     await this.userRepository.insert(users);
         // }
-
         // if ((await this.riderRepository.count()) === 0) {
         //     await this.riderRepository.insert(riders);
         // }

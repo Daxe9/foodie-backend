@@ -1,5 +1,6 @@
-import { IsNumber, Length } from "class-validator";
+import {IsDecimal, IsNumber, IsString, Length} from "class-validator";
 import {
+    Column,
     Entity,
     JoinColumn,
     ManyToMany,
@@ -15,6 +16,27 @@ export class Order {
     @PrimaryGeneratedColumn()
     @IsNumber()
     id: number;
+
+    @Column({
+        nullable: false
+    })
+    @IsNumber()
+    address: string
+
+    @Column("decimal", {
+        nullable: false,
+        precision: 10,
+        scale: 2
+    })
+    @IsDecimal()
+    total: number;
+
+    @Column({
+        length: 15,
+        nullable: false
+    })
+    @IsString()
+    phone: string;
 
     @ManyToOne(() => User, (user) => user.orders)
     @JoinColumn({

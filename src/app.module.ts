@@ -9,7 +9,9 @@ import { DataSource } from "typeorm";
 import { User } from "./user/entities/user.entity";
 import { ItemModule } from "./item/item.module";
 import { OrderModule } from "./order/order.module";
-import {Restaurant, SingleDay, Timetable} from "./restaurant/entities/restaurant.entity";
+import { Restaurant } from "./restaurant/entities/restaurant.entity";
+import { Timetable } from "./restaurant/entities/timetable.entity";
+import { SingleDay } from "./restaurant/entities/singleDay.entity";
 import { Item } from "./item/entities/item.entity";
 import { RiderModule } from "./rider/rider.module";
 import { Order } from "./order/entities/order.entity";
@@ -19,8 +21,10 @@ import { JwtModule } from "@nestjs/jwt";
 import { CreateTables1686815288244 } from "../migrations/1686815288244-CreateTables";
 import { PersonModule } from "./person/person.module";
 import { Person } from "./person/entities/person.entity";
+import {RestaurantService} from "./restaurant/restaurant.service";
 
 @Module({
+    controllers: [AppController],
     imports: [
         ConfigModule.forRoot({
             isGlobal: true
@@ -35,7 +39,16 @@ import { Person } from "./person/entities/person.entity";
                 database: "FOODIE_DEV",
                 username: configService.get<string>("DATABASE_USER") || "",
                 password: configService.get<string>("DATABASE_PASSWORD") || "",
-                entities: [User, Restaurant, Item, Order, Rider, Person, Timetable, SingleDay]
+                entities: [
+                    User,
+                    Restaurant,
+                    Item,
+                    Order,
+                    Rider,
+                    Person,
+                    Timetable,
+                    SingleDay
+                ]
             })
         }),
         TypeOrmModule.forFeature([User]),
@@ -48,7 +61,6 @@ import { Person } from "./person/entities/person.entity";
         JwtModule,
         PersonModule
     ],
-    controllers: [AppController],
     providers: [AppService]
 })
 export class AppModule {

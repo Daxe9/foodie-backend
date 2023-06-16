@@ -167,56 +167,56 @@ const specialUsers: CreateUserDto[] = [
     }
 ];
 
-const specialRestaurant: CreateRestaurantDto[] = [
-    {
-        name: "La casa dei proci",
-        email: "casa@proci.com",
-        password: "Wlatopa!1!",
-        phone: "3392361538",
-        address: "via di itaca 91",
-        timetable: {
-            monday: {
-                opening1: "12:00",
-                closing1: "15:00",
-                opening2: "19:00",
-                closing2: "23:00"
-            },
-            tuesday: {
-                opening1: "12:00",
-                closing1: "15:00",
-                opening2: "19:00",
-                closing2: "23:00"
-            },
-            wednesday: {
-                opening1: "12:00",
-                closing1: "15:00",
-                opening2: "19:00",
-                closing2: "23:00"
-            },
-            thursday: {
-                opening1: "12:00",
-                closing1: "15:00",
-                opening2: "19:00",
-                closing2: "23:00"
-            },
-            friday: {
-                opening1: "12:00",
-                closing1: "15:00",
-                opening2: "19:00",
-                closing2: "23:00"
-            },
-            saturday: {
-                opening1: "12:00",
-                closing1: "15:00",
-                opening2: "19:00",
-                closing2: "23:00"
-            },
-            sunday: {
-                opening1: "12:00",
-                closing1: "15:00",
-                opening2: "19:00",
-                closing2: "23:00"
-            },
-        }
-    }
-];
+// const specialRestaurant: CreateRestaurantDto[] = [
+//     {
+//         name: "La casa dei proci",
+//         email: "casa@proci.com",
+//         password: "Wlatopa!1!",
+//         phone: "3392361538",
+//         address: "via di itaca 91",
+//         timetable: {
+//             monday: {
+//                 opening1: "12:00",
+//                 closing1: "15:00",
+//                 opening2: "19:00",
+//                 closing2: "23:00"
+//             },
+//             tuesday: {
+//                 opening1: "12:00",
+//                 closing1: "15:00",
+//                 opening2: "19:00",
+//                 closing2: "23:00"
+//             },
+//             wednesday: {
+//                 opening1: "12:00",
+//                 closing1: "15:00",
+//                 opening2: "19:00",
+//                 closing2: "23:00"
+//             },
+//             thursday: {
+//                 opening1: "12:00",
+//                 closing1: "15:00",
+//                 opening2: "19:00",
+//                 closing2: "23:00"
+//             },
+//             friday: {
+//                 opening1: "12:00",
+//                 closing1: "15:00",
+//                 opening2: "19:00",
+//                 closing2: "23:00"
+//             },
+//             saturday: {
+//                 opening1: "12:00",
+//                 closing1: "15:00",
+//                 opening2: "19:00",
+//                 closing2: "23:00"
+//             },
+//             sunday: {
+//                 opening1: "12:00",
+//                 closing1: "15:00",
+//                 opening2: "19:00",
+//                 closing2: "23:00"
+//             }
+//         }
+//     }
+// ];

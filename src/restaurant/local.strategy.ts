@@ -19,10 +19,7 @@ export class LocalStrategy extends PassportStrategy(
     async validate(
         email: string,
         password: string
-    ): /*Promise<RestaurantPayload>*/ Promise<null> {
-        console.log("from restaurant")
-        return null;
-        /*
+    ): Promise<RestaurantPayload> {
         const restaurant = await this.restaurantService.validateUser(
             email,
             password
@@ -32,6 +29,5 @@ export class LocalStrategy extends PassportStrategy(
         }
         return restaurant;
 
-         */
     }
 }

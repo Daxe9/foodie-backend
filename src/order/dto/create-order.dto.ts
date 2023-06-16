@@ -1,16 +1,17 @@
-import { IsEmail, IsString, Length } from "class-validator";
+import {IsDecimal, IsMobilePhone, IsString, ValidateNested} from "class-validator";
 
 export class CreateOrderDto {
     @IsString()
-    @Length(1)
-    name: string;
+    address: string;
 
-    @IsString()
-    description: string;
+    @IsDecimal()
+    total: number;
 
-    @IsEmail()
-    @Length(1)
-    userEmail: string;
+    @IsMobilePhone("it-IT")
+    phone: string;
 
-    itemsId: number[];
+    @ValidateNested({
+        each: true
+    })
+    itemsId: number[]
 }
