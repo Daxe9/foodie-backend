@@ -8,10 +8,6 @@ export class CreateItemDto {
     @IsString()
     description: string;
 
-    @IsString()
-    @Length(1)
-    nameRestaurant: string;
-
     @IsDecimal()
     price: number;
 

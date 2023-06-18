@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Palle al sugo",
+    "description": "Palle cotte nel sugo di carne",
+    "price": 13.50,
+    "preparationTimeMinutes": 9
+  },
+  {
+    "name": "Spaghetti aglio e olio",
+    "description": "Spaghetti with garlic, olive oil, and chili flakes",
+    "price": 12.99,
+    "preparationTimeMinutes": 15
+  },
+  {
+    "name": "Chicken Alfredo",
+    "description": "Grilled chicken breast served with creamy Alfredo sauce and pasta",
+    "price": 15.95,
+    "preparationTimeMinutes": 20
+  },
+  {
+    "name": "Mushroom Risotto",
+    "description": "Creamy Arborio rice cooked with a medley of mushrooms and Parmesan cheese",
+    "price": 14.50,
+    "preparationTimeMinutes": 25
+  }
+]

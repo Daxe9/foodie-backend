@@ -1,7 +1,7 @@
 import {
     Body,
     Controller,
-    Get,
+    Get, HttpCode,
     HttpException,
     HttpStatus,
     Patch,
@@ -89,6 +89,7 @@ export class RestaurantController {
     }
 
     @UseGuards(AuthGuard("restaurantStrategy"))
+    @HttpCode(200)
     @Post("/login")
     async login(@Request() req) {
         return this.restaurantService.login(req.user as RestaurantPayload);
@@ -157,7 +158,9 @@ export class RestaurantController {
             );
         }
 
-        return updatedItems;
+        return {
+            addedItems: updatedItems
+        };
     }
 
     @Get("/menu")

@@ -2,7 +2,7 @@ import { IsDecimal, IsNumber, IsString, Length } from "class-validator";
 import {
     Column,
     Entity,
-    JoinColumn,
+    JoinColumn, JoinTable,
     ManyToMany,
     ManyToOne,
     PrimaryGeneratedColumn
@@ -45,7 +45,18 @@ export class Order {
     @Length(1)
     user: User;
 
-    @ManyToMany(() => Item)
+    @ManyToMany(() => Item, { cascade: true })
+    @JoinTable({
+        name: "itemOrder",
+        joinColumn: {
+            name: "orderId",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "itemId",
+            referencedColumnName: "id"
+        }
+    })
     items: Item[];
 
     @ManyToOne(() => Rider, (rider) => rider.orders)

@@ -27,12 +27,15 @@ export class ItemService {
     }
 
     // get a list of item based in array of id in input
-    async getItems(itemsId: number[]): Promise<Item[]> {
+    async getItems(itemsId: number[], restaurantId: number): Promise<Item[] | null> {
         const items: Item[] = [];
         for (const id of itemsId) {
             const item: Item | null = await this.itemRepository.findOne({
                 where: {
-                    id
+                    id,
+                    restaurant: {
+                        id: restaurantId
+                    }
                 },
                 relations: ["restaurant"]
             });
@@ -40,6 +43,6 @@ export class ItemService {
                 items.push(item);
             }
         }
-        return items;
+        return items.length === itemsId.length ? items : null;
     }
 }

@@ -9,7 +9,7 @@ import {
     HttpException,
     HttpStatus,
     UseGuards,
-    Get
+    Get, HttpCode
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -83,6 +83,7 @@ export class UserController {
     }
 
     @UseGuards(AuthGuard("userStrategy"))
+    @HttpCode(200)
     @Post("/login")
     async login(@Request() req) {
         // return jwt token

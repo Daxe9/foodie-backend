@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
 import { CreateOrderDto } from "./dto/create-order.dto";
 import {UserService} from "../user/user.service";
 import {PersonService} from "../person/person.service";
@@ -22,30 +22,47 @@ export class OrderService {
 
     async create(createOrderDto: CreateOrderDto, user: User) {
         const queryRunner = this.dataSource.createQueryRunner();
-        const items = await this.itemService.getItems(createOrderDto.itemsId);
-        const totalPrice = items.reduce((acc, item) => acc + Number(item.price), 0);
+        const items = await this.itemService.getItems(createOrderDto.itemsId, createOrderDto.restaurantId);
 
+        // items are not from the same restaurant
+        if (!items) {
+            throw new HttpException("Items must belong to the same restaurant", HttpStatus.FORBIDDEN);
+        }
+
+        // get the preparation time of the item that takes time and the total price
+        let preparationTime = 0;
+        let totalPrice = 0;
+        for (const item of items) {
+            if (item.preparationTimeMinutes > preparationTime) {
+                preparationTime = item.preparationTimeMinutes;
+            }
+            totalPrice += Number(item.price);
+        }
+
+        // create order entity
         const order = this.orderRepository.create({
             address: createOrderDto.address,
             phone: createOrderDto.phone,
             total: totalPrice
         });
 
+        // start transaction
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
             order.user = user;
+            order.items = [...items];
 
-
-            items.forEach(async (item )=> {
-                item.orders = [order]
-                await queryRunner.manager.save(Item, item);
-            });
-            // order.items = [...items];
-            const result = await queryRunner.manager.insert(Order, order);
-
-
+            const orderDbReference = await queryRunner.manager.save(Order, order);
             await queryRunner.commitTransaction();
+
+            // TODO: rider initialization
+            return {
+                preparationTime,
+                totalPrice,
+                orderId: orderDbReference.id
+            }
+
         } catch (err) {
             console.log(err.message)
             // since we have errors lets rollback the changes we made
