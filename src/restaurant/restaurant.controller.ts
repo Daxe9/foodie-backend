@@ -21,7 +21,8 @@ import { ItemService } from "../item/item.service";
 import { Item } from "../item/entities/item.entity";
 import { CreateItemDto } from "../item/dto/create-item.dto";
 import { GetOrdersDto } from "./dto/get-orders.dto";
-import { OrderStatus } from "../order/entities/order.entity";
+import { Order, OrderStatus } from "../order/entities/order.entity";
+import { AcceptOrdersDto } from "./dto/accept-orders.dto";
 
 @Controller("restaurant")
 export class RestaurantController {
@@ -151,6 +152,7 @@ export class RestaurantController {
             );
         }
 
+        // check preparation time field
         let temp = updateItemsDto.items;
         temp.forEach((item: CreateItemDto) => {
             if (!Number.isInteger(item.preparationTimeMinutes))
@@ -192,6 +194,15 @@ export class RestaurantController {
         return {
             addedItems: updatedItems
         };
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post("/acceptOrders")
+    async acceptOrders(@Body() acceptOrdersDto: AcceptOrdersDto) {
+        const orders: Order[] = await this.restaurantService.acceptOrders(
+            acceptOrdersDto.ordersId
+        );
+        return orders;
     }
 
     @Get("/menu")

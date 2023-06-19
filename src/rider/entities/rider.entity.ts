@@ -7,7 +7,7 @@ import {
     JoinColumn,
     PrimaryGeneratedColumn
 } from "typeorm";
-import { IsEmail, IsMobilePhone, IsString } from "class-validator";
+import { IsBoolean, IsEmail, IsMobilePhone, IsString } from "class-validator";
 import { Order } from "../../order/entities/order.entity";
 import { Person } from "../../person/entities/person.entity";
 
@@ -22,4 +22,7 @@ export class Rider {
 
     @OneToMany(() => Order, (order) => order.rider)
     orders: Order[];
+
+    @Column("boolean")
+    isAvailable: boolean;
 }

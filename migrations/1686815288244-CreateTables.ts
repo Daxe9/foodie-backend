@@ -65,6 +65,7 @@ export class CreateTables1686815288244 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE \`rider\` (
 \t\`id\` INT AUTO_INCREMENT NOT NULL,
 \t\`personId\` INT NOT NULL,
+\t\`isAvailable\` BOOLEAN NOT NULL,
 \tCONSTRAINT \`FK_rider_person\` FOREIGN KEY (\`personId\`) REFERENCES \`person\` (\`id\`),
     PRIMARY KEY(\`id\`)
 );`)
@@ -92,7 +93,7 @@ export class CreateTables1686815288244 implements MigrationInterface {
 \tCONSTRAINT \`FK_order_userId\` FOREIGN KEY (\`userId\`) REFERENCES \`user\` (\`id\`), 
 \tCONSTRAINT \`FK_order_riderId\` FOREIGN KEY (\`riderId\`) REFERENCES \`rider\` (\`id\`),
 \tCONSTRAINT \`FK_order_restaurantId\` FOREIGN KEY (\`restaurantId\`) REFERENCES \`restaurant\` (\`id\`)
-                                 );
+);
 `)
         await queryRunner.query(`CREATE TABLE \`itemOrder\` ( 
 \t\`id\` INT NOT NULL AUTO_INCREMENT,

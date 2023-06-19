@@ -18,10 +18,8 @@ import { Order } from "./order/entities/order.entity";
 import { Rider } from "./rider/entities/rider.entity";
 import { UtilsModule } from "./utils/utils.module";
 import { JwtModule } from "@nestjs/jwt";
-import { CreateTables1686815288244 } from "../migrations/1686815288244-CreateTables";
 import { PersonModule } from "./person/person.module";
 import { Person } from "./person/entities/person.entity";
-import { RestaurantService } from "./restaurant/restaurant.service";
 
 @Module({
     controllers: [AppController],

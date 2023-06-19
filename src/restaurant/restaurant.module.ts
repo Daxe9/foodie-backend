@@ -15,6 +15,15 @@ import { Item } from "../item/entities/item.entity";
 import { Person } from "../person/entities/person.entity";
 import { PersonModule } from "../person/person.module";
 import { PersonService } from "../person/person.service";
+import { OrderModule } from "../order/order.module";
+import { OrderService } from "../order/order.service";
+import { Order } from "../order/entities/order.entity";
+import { UserService } from "../user/user.service";
+import { UserModule } from "../user/user.module";
+import { User } from "../user/entities/user.entity";
+import { RiderModule } from "../rider/rider.module";
+import { RiderService } from "../rider/rider.service";
+import { Rider } from "../rider/entities/rider.entity";
 
 @Module({
     imports: [
@@ -34,11 +43,25 @@ import { PersonService } from "../person/person.service";
             Item,
             Person,
             Timetable,
-            SingleDay
+            SingleDay,
+            Order,
+            User,
+            Rider
         ]),
-        PersonModule
+        PersonModule,
+        OrderModule,
+        UserModule,
+        RiderModule
     ],
     controllers: [RestaurantController],
-    providers: [RestaurantService, LocalStrategy, ItemService, PersonService]
+    providers: [
+        RestaurantService,
+        LocalStrategy,
+        ItemService,
+        PersonService,
+        OrderService,
+        UserService,
+        RiderService
+    ]
 })
 export class RestaurantModule {}

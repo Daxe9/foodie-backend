@@ -6,14 +6,13 @@ import { JwtService } from "@nestjs/jwt";
 import { Restaurant, RestaurantPayload } from "./entities/restaurant.entity";
 import { Timetable } from "./entities/timetable.entity";
 import { SingleDay } from "./entities/singleDay.entity";
-import {
-    CreateRestaurantDto,
-    SingleDay as SingleDayDto
-} from "./dto/create-restaurant.dto";
+import { CreateRestaurantDto } from "./dto/create-restaurant.dto";
 import { Item } from "../item/entities/item.entity";
 import { Person } from "../person/entities/person.entity";
 import { PersonService } from "../person/person.service";
 import { CreateSingleDayDto } from "../person/dto/create-single-day.dto";
+import { Order, OrderStatus } from "../order/entities/order.entity";
+import { OrderService } from "../order/order.service";
 
 @Injectable()
 export class RestaurantService {
@@ -26,15 +25,12 @@ export class RestaurantService {
         private timetableRepository: Repository<Timetable>,
         @InjectRepository(Item)
         private itemRepository: Repository<Item>,
+        private orderService: OrderService,
         private dataSource: DataSource,
         private personService: PersonService,
         private jwtService: JwtService
     ) {}
 
-    /**
-     * return the first user with given email
-     * @param email
-     */
     async findOne(
         email: string,
         relations: string[]
@@ -131,6 +127,29 @@ export class RestaurantService {
         }
 
         return restaurant;
+    }
+
+    async acceptOrders(ordersId: number[]): Promise<Order[]> {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try {
+            const orders = await this.orderService.getOrders(ordersId);
+
+            // update orders
+            for (let order of orders) {
+                order.status = OrderStatus.PREPARATION_START;
+            }
+            // save orders
+            const ordersDbReference = await queryRunner.manager.save(orders);
+            await queryRunner.commitTransaction();
+
+            return ordersDbReference;
+        } catch (e) {
+            await queryRunner.rollbackTransaction();
+        } finally {
+            await queryRunner.release();
+        }
     }
 
     async save(restaurant: Restaurant) {

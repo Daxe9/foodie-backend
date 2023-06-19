@@ -37,17 +37,13 @@ export class UserService {
         return this.userRepository.save(user);
     }
 
-    async isPresent(email: string): Promise<boolean> {
+    async isPresent(email: string) {
         return this.personService.isPresent(email);
     }
 
-    /**
-     * return the first user with given email
-     * @param email
-     */
     async findOne(email: string): Promise<User | null> {
         const person: Person | null = await this.personService.findOne(email);
-        if (!Person) {
+        if (!person) {
             return null;
         }
         const user: User | null = await this.userRepository.findOne({
@@ -62,11 +58,6 @@ export class UserService {
         return user;
     }
 
-    /**
-     * Callback function of LocalStrategy from Passportjs
-     * @param email
-     * @param password
-     */
     async validateUser(email: string, password: string): Promise<UserPayload> {
         try {
             const user: User | null = await this.findOne(email);

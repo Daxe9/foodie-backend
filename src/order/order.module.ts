@@ -13,13 +13,17 @@ import { Item } from "../item/entities/item.entity";
 import { User } from "../user/entities/user.entity";
 import { JwtModule, JwtService } from "@nestjs/jwt";
 import { Person } from "../person/entities/person.entity";
+import { RiderModule } from "../rider/rider.module";
+import { Rider } from "../rider/entities/rider.entity";
+import { RiderService } from "../rider/rider.service";
 
 @Module({
     imports: [
         UserModule,
         PersonModule,
         ItemModule,
-        TypeOrmModule.forFeature([Order, User, Item, Person]),
+        RiderModule,
+        TypeOrmModule.forFeature([Order, User, Item, Person, Rider]),
         JwtModule
     ],
     controllers: [OrderController],
@@ -28,7 +32,8 @@ import { Person } from "../person/entities/person.entity";
         UserService,
         PersonService,
         ItemService,
-        JwtService
+        JwtService,
+        RiderService
     ]
 })
 export class OrderModule {}
