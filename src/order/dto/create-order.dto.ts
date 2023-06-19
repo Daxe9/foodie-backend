@@ -1,7 +1,9 @@
 import {
     ArrayNotEmpty,
-    IsDecimal, IsInt,
-    IsMobilePhone, IsNumber,
+    IsDecimal,
+    IsInt,
+    IsMobilePhone,
+    IsNumber,
     IsString,
     ValidateNested
 } from "class-validator";
@@ -17,8 +19,11 @@ export class CreateOrderDto {
     phone: string;
 
     @ArrayNotEmpty()
-    @IsNumber({}, {
-        each: true
-    })
+    @IsNumber(
+        {},
+        {
+            each: true
+        }
+    )
     itemsId: number[];
 }

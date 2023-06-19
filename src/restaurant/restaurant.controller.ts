@@ -1,7 +1,8 @@
 import {
     Body,
     Controller,
-    Get, HttpCode,
+    Get,
+    HttpCode,
     HttpException,
     HttpStatus,
     Patch,
@@ -19,7 +20,8 @@ import { UpdateItemsDto } from "./dto/update-items.dto";
 import { ItemService } from "../item/item.service";
 import { Item } from "../item/entities/item.entity";
 import { CreateItemDto } from "../item/dto/create-item.dto";
-import * as moment from "moment";
+import { GetOrdersDto } from "./dto/get-orders.dto";
+import { OrderStatus } from "../order/entities/order.entity";
 
 @Controller("restaurant")
 export class RestaurantController {
@@ -104,6 +106,35 @@ export class RestaurantController {
         );
         delete restaurant.person.password;
         return restaurant;
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get("/orders")
+    async getOrders(@Request() req, @Body() getOrdersDto: GetOrdersDto) {
+        const restaurant: Restaurant | null =
+            await this.restaurantService.findOne(req.user.email, ["orders"]);
+
+        if (!restaurant) {
+            throw new HttpException(
+                "No restaurant found",
+                HttpStatus.NOT_FOUND
+            );
+        }
+
+        const newOrdersOfTheDay = restaurant.orders.filter((order) => {
+            const dateObject = new Date(order.timestamp);
+            // get the date based on iso 8601 format
+            const orderDate = dateObject.toISOString().split("T")[0];
+
+            if (
+                orderDate === getOrdersDto.day &&
+                order.status !== OrderStatus.DELIVERY_END &&
+                order.status !== OrderStatus.DELIVERY_START
+            ) {
+                return order;
+            }
+        });
+        return { day: getOrdersDto.day, orders: newOrdersOfTheDay };
     }
 
     @UseGuards(JwtAuthGuard)

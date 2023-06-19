@@ -2,7 +2,8 @@ import { IsDecimal, IsNumber, IsString, Length } from "class-validator";
 import {
     Column,
     Entity,
-    JoinColumn, JoinTable,
+    JoinColumn,
+    JoinTable,
     ManyToMany,
     ManyToOne,
     PrimaryGeneratedColumn
@@ -10,6 +11,15 @@ import {
 import { User } from "../../user/entities/user.entity";
 import { Item } from "../../item/entities/item.entity";
 import { Rider } from "../../rider/entities/rider.entity";
+import { Restaurant } from "../../restaurant/entities/restaurant.entity";
+
+export enum OrderStatus {
+    PENDING = "pending",
+    PREPARATION_START = "preparationStart",
+    PREPARATION_END = "preparationEnd",
+    DELIVERY_START = "deliveryStart",
+    DELIVERY_END = "deliveryEnd"
+}
 
 @Entity()
 export class Order {
@@ -38,6 +48,15 @@ export class Order {
     @IsString()
     phone: string;
 
+    @Column({
+        type: "enum",
+        enum: OrderStatus
+    })
+    status: OrderStatus;
+
+    @Column({ type: "datetime" })
+    timestamp: Date;
+
     @ManyToOne(() => User, (user) => user.orders)
     @JoinColumn({
         name: "userId"
@@ -64,4 +83,10 @@ export class Order {
         name: "riderId"
     })
     rider: Rider;
+
+    @ManyToOne(() => Restaurant, (restaurant) => restaurant.orders)
+    @JoinColumn({
+        name: "restaurantId"
+    })
+    restaurant: Restaurant;
 }

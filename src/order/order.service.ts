@@ -1,13 +1,13 @@
-import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { CreateOrderDto } from "./dto/create-order.dto";
-import {UserService} from "../user/user.service";
-import {PersonService} from "../person/person.service";
-import {User} from "../user/entities/user.entity";
-import {ItemService} from "../item/item.service";
-import {Order} from "./entities/order.entity";
-import {InjectRepository} from "@nestjs/typeorm";
-import {DataSource, Repository} from "typeorm";
-import {Item} from "../item/entities/item.entity";
+import { UserService } from "../user/user.service";
+import { PersonService } from "../person/person.service";
+import { User } from "../user/entities/user.entity";
+import { ItemService } from "../item/item.service";
+import { Order, OrderStatus } from "./entities/order.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { DataSource, Repository } from "typeorm";
+import { Item } from "../item/entities/item.entity";
 
 @Injectable()
 export class OrderService {
@@ -18,15 +18,21 @@ export class OrderService {
         private readonly personService: PersonService,
         private readonly itemService: ItemService,
         private readonly dataSource: DataSource
-    ) { }
+    ) {}
 
     async create(createOrderDto: CreateOrderDto, user: User) {
         const queryRunner = this.dataSource.createQueryRunner();
-        const items = await this.itemService.getItems(createOrderDto.itemsId, createOrderDto.restaurantId);
+        const items = await this.itemService.getItems(
+            createOrderDto.itemsId,
+            createOrderDto.restaurantId
+        );
 
         // items are not from the same restaurant
         if (!items) {
-            throw new HttpException("Items must belong to the same restaurant", HttpStatus.FORBIDDEN);
+            throw new HttpException(
+                "Items must belong to the same restaurant",
+                HttpStatus.FORBIDDEN
+            );
         }
 
         // get the preparation time of the item that takes time and the total price
@@ -43,30 +49,36 @@ export class OrderService {
         const order = this.orderRepository.create({
             address: createOrderDto.address,
             phone: createOrderDto.phone,
-            total: totalPrice
+            timestamp: new Date(),
+            total: totalPrice,
+            status: OrderStatus.PENDING
         });
 
         // start transaction
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
+            order.restaurant = <any>{ id: createOrderDto.restaurantId };
             order.user = user;
             order.items = [...items];
 
-            const orderDbReference = await queryRunner.manager.save(Order, order);
+            const orderDbReference = await queryRunner.manager.save(
+                Order,
+                order
+            );
             await queryRunner.commitTransaction();
 
             // TODO: rider initialization
             return {
                 preparationTime,
-                totalPrice,
+                totalPrice: Number(totalPrice.toFixed(2)),
                 orderId: orderDbReference.id
-            }
-
+            };
         } catch (err) {
-            console.log(err.message)
+            console.log(err.message);
             // since we have errors lets rollback the changes we made
             await queryRunner.rollbackTransaction();
+            return null;
         } finally {
             // you need to release a queryRunner which was manually instantiated
             await queryRunner.release();

@@ -82,13 +82,17 @@ export class CreateTables1686815288244 implements MigrationInterface {
 \t\`id\` INT NOT NULL AUTO_INCREMENT, 
 \t\`address\` VARCHAR(255) NOT NULL,
 \t\`phone\` VARCHAR(15) NOT NULL,
+\t\`timestamp\` DATETIME NOT NULL,
+\t\`status\` ENUM('pending', 'preparationStart', 'preparationEnd', 'deliveryStart', 'deliveryEnd') NOT NULL,
 \t\`total\` DECIMAL(10, 2) NOT NULL,
-\t\`userId\`  INT NOT NULL, 
+\t\`userId\`  INT NOT NULL,
+\t\`restaurantId\`  INT NOT NULL,
 \t\`riderId\` INT NULL, 
     PRIMARY KEY (\`id\`), 
 \tCONSTRAINT \`FK_order_userId\` FOREIGN KEY (\`userId\`) REFERENCES \`user\` (\`id\`), 
-\tCONSTRAINT \`FK_order_riderId\` FOREIGN KEY (\`riderId\`) REFERENCES \`rider\` (\`id\`) 
-);
+\tCONSTRAINT \`FK_order_riderId\` FOREIGN KEY (\`riderId\`) REFERENCES \`rider\` (\`id\`),
+\tCONSTRAINT \`FK_order_restaurantId\` FOREIGN KEY (\`restaurantId\`) REFERENCES \`restaurant\` (\`id\`)
+                                 );
 `)
         await queryRunner.query(`CREATE TABLE \`itemOrder\` ( 
 \t\`id\` INT NOT NULL AUTO_INCREMENT,

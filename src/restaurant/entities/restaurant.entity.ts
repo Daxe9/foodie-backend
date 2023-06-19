@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { Person } from "../../person/entities/person.entity";
 import { Timetable } from "./timetable.entity";
+import { Order } from "../../order/entities/order.entity";
 
 export type RestaurantPayload = {
     email: string;
@@ -46,4 +47,7 @@ export class Restaurant {
     @OneToOne(() => Timetable)
     @JoinColumn()
     timetable: Timetable;
+
+    @OneToMany(() => Order, (order) => order.restaurant)
+    orders: Order[];
 }
