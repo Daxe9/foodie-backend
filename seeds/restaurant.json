@@ -1,56 +1,56 @@
 [
   {
-  "name": "La casa dei proci",
-  "url": "https://cdn.cloudflare.com/procio",
-  "category": "Italian",
-  "email": "casa@proci.com",
-  "password": "Wlatopa!1!",
-  "phone": "3392361538",
-  "address": "via di itaca 91",
-  "timetable": {
-    "monday": {
-      "opening1": "12:00",
-      "closing1": "15:00",
-      "opening2": "19:00",
-      "closing2": "23:00"
-    },
-    "tuesday": {
-      "opening1": "12:00",
-      "closing1": "15:00",
-      "opening2": "19:00",
-      "closing2": "23:00"
-    },
-    "wednesday": {
-      "opening1": "12:00",
-      "closing1": "15:00",
-      "opening2": "19:00",
-      "closing2": "23:00"
-    },
-    "thursday": {
-      "opening1": "12:00",
-      "closing1": "15:00",
-      "opening2": "19:00",
-      "closing2": "23:00"
-    },
-    "friday": {
-      "opening1": "12:00",
-      "closing1": "15:00",
-      "opening2": "19:00",
-      "closing2": "23:00"
-    },
-    "saturday": {
-      "opening1": "12:00",
-      "closing1": "15:00",
-      "opening2": "19:00",
-      "closing2": "23:00"
-    },
-    "sunday": {
-      "opening1": "12:00",
-      "closing1": "15:00",
-      "opening2": "19:00",
-      "closing2": "23:00"
+    "name": "La casa dei proci",
+    "url": "https://cdn.cloudflare.com/procio",
+    "category": "Italian",
+    "email": "casa@proci.com",
+    "password": "Wlatopa!1!",
+    "phone": "3392361538",
+    "address": "via di itaca 91",
+    "timetable": {
+      "monday": {
+        "opening1": "12:00",
+        "closing1": "15:00",
+        "opening2": "19:00",
+        "closing2": "23:00"
+      },
+      "tuesday": {
+        "opening1": "12:00",
+        "closing1": "15:00",
+        "opening2": "19:00",
+        "closing2": "23:00"
+      },
+      "wednesday": {
+        "opening1": "12:00",
+        "closing1": "15:00",
+        "opening2": "19:00",
+        "closing2": "23:00"
+      },
+      "thursday": {
+        "opening1": "12:00",
+        "closing1": "15:00",
+        "opening2": "19:00",
+        "closing2": "23:00"
+      },
+      "friday": {
+        "opening1": "12:00",
+        "closing1": "15:00",
+        "opening2": "19:00",
+        "closing2": "23:00"
+      },
+      "saturday": {
+        "opening1": "12:00",
+        "closing1": "15:00",
+        "opening2": "19:00",
+        "closing2": "23:00"
+      },
+      "sunday": {
+        "opening1": "12:00",
+        "closing1": "15:00",
+        "opening2": "19:00",
+        "closing2": "23:00"
+      }
     }
-  }
   },
   {
     "name": "Il salotto gargantuesco",
@@ -102,6 +102,59 @@
         "closing1": "15:00",
         "opening2": null,
         "closing2": null
+      }
+    }
+  },
+  {
+    "name": "Trattoria di Pipino Il Breve",
+    "url": "https://cdn.cloudflare.com/pipino",
+    "category": "French",
+    "email": "trattoria@pipino.com",
+    "password": "VivalaFrancia1!",
+    "phone": "3392361538",
+    "address": "via voltaire 91",
+    "timetable": {
+      "monday": {
+        "opening1": "08:30",
+        "closing1": "15:00",
+        "opening2": "19:00",
+        "closing2": "23:00"
+      },
+      "tuesday": {
+        "opening1": "12:00",
+        "closing1": "15:00",
+        "opening2": "19:00",
+        "closing2": "23:00"
+      },
+      "wednesday": {
+        "opening1": "12:00",
+        "closing1": "15:00",
+        "opening2": "19:00",
+        "closing2": "23:00"
+      },
+      "thursday": {
+        "opening1": "12:00",
+        "closing1": "15:00",
+        "opening2": "19:00",
+        "closing2": "23:00"
+      },
+      "friday": {
+        "opening1": "12:00",
+        "closing1": "15:00",
+        "opening2": "19:00",
+        "closing2": "23:00"
+      },
+      "saturday": {
+        "opening1": "12:00",
+        "closing1": "15:00",
+        "opening2": "19:00",
+        "closing2": "23:00"
+      },
+      "sunday": {
+        "opening1": "12:00",
+        "closing1": "15:00",
+        "opening2": "19:00",
+        "closing2": "23:00"
       }
     }
   }

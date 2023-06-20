@@ -30,8 +30,8 @@ export class UserService {
         };
         const person = await this.personService.save(personDto);
         const user = this.userRepository.create({
-            firstName: createUserDto.firstName,
-            lastName: createUserDto.lastName
+            firstName: createUserDto.firstName.toLowerCase(),
+            lastName: createUserDto.lastName.toLowerCase()
         });
         user.person = person;
         return this.userRepository.save(user);

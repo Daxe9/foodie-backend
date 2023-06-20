@@ -22,7 +22,7 @@ import { Item } from "../item/entities/item.entity";
 import { CreateItemDto } from "../item/dto/create-item.dto";
 import { GetOrdersDto } from "./dto/get-orders.dto";
 import { Order, OrderStatus } from "../order/entities/order.entity";
-import { AcceptOrdersDto } from "./dto/accept-orders.dto";
+import { ChangeOrderStatusDto } from "./dto/change-order-status.dto";
 
 @Controller("restaurant")
 export class RestaurantController {
@@ -46,13 +46,6 @@ export class RestaurantController {
                 HttpStatus.BAD_REQUEST
             );
         }
-
-        // convert columns in lower case except for password
-        const pwTemp = createRestaurantDto.password;
-        for (let property in createRestaurantDto) {
-            property = property.toLowerCase();
-        }
-        createRestaurantDto.password = pwTemp;
 
         // password validation, should return a list of message
         const passwordValidationMessage = this.utilsService.passwordValidation(
@@ -198,9 +191,29 @@ export class RestaurantController {
 
     @UseGuards(JwtAuthGuard)
     @Post("/acceptOrders")
-    async acceptOrders(@Body() acceptOrdersDto: AcceptOrdersDto) {
-        const orders: Order[] = await this.restaurantService.acceptOrders(
-            acceptOrdersDto.ordersId
+    async acceptOrders(
+        @Request() req,
+        @Body() acceptOrdersDto: ChangeOrderStatusDto
+    ) {
+        const orders: Order[] | Error =
+            await this.restaurantService.changeOrderStatus(
+                acceptOrdersDto.ordersId,
+                req.user.id,
+                OrderStatus.PREPARATION_START
+            );
+        return orders;
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post("/doneOrders")
+    async doneOrders(
+        @Request() req,
+        @Body() acceptOrdersDto: ChangeOrderStatusDto
+    ) {
+        const orders: Order[] = await this.restaurantService.changeOrderStatus(
+            acceptOrdersDto.ordersId,
+            req.user.id,
+            OrderStatus.PREPARATION_END
         );
         return orders;
     }

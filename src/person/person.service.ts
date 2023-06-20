@@ -11,10 +11,6 @@ export class PersonService {
         private personRepository: Repository<Person>
     ) {}
 
-    async insert(createPersonDto: CreatePersonDto) {
-        return this.personRepository.insert(createPersonDto);
-    }
-
     create(createPersonDto: CreatePersonDto) {
         return this.personRepository.create(createPersonDto);
     }
@@ -38,6 +34,13 @@ export class PersonService {
     }
 
     async save(createPersonDto: CreatePersonDto) {
+        // convert all values to lowercase except for password
+        const pwTemp = createPersonDto.password;
+        for (let property in createPersonDto) {
+            createPersonDto[property] = createPersonDto[property].toLowerCase();
+        }
+        createPersonDto.password = pwTemp;
+
         return this.personRepository.save(createPersonDto);
     }
 }

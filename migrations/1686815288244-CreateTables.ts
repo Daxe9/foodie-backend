@@ -53,8 +53,8 @@ export class CreateTables1686815288244 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE \`restaurant\` ( 
 \t\`id\` INT AUTO_INCREMENT NOT NULL,
 \t\`name\` VARCHAR(255) NOT NULL UNIQUE,
-\t\`url\` VARCHAR(2048) NOT NULL UNIQUE,
-\t\`category\` VARCHAR(255) NOT NULL UNIQUE,
+\t\`url\` VARCHAR(2048) NOT NULL,
+\t\`category\` VARCHAR(255) NOT NULL,
 \t\`personId\` INT NOT NULL,
 \t\`timetableId\` INT,
 \tCONSTRAINT \`FK_restaurant_person\` FOREIGN KEY (\`personId\`) REFERENCES \`person\` (\`id\`),

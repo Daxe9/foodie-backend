@@ -35,13 +35,6 @@ export class RiderController {
             );
         }
 
-        // TODO: convert columns in lower case except for password, not working rn
-        const pwTemp = createRiderDto.password;
-        for (let property in createRiderDto) {
-            property = property.toLowerCase();
-        }
-        createRiderDto.password = pwTemp;
-
         // password validation, should return a list of message
         const passwordValidationMessage = this.utilsService.passwordValidation(
             createRiderDto.password

@@ -13,6 +13,7 @@ import { Timetable } from "./timetable.entity";
 import { Order } from "../../order/entities/order.entity";
 
 export type RestaurantPayload = {
+    id: number;
     email: string;
     name: string;
     address: string;

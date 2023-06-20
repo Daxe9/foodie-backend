@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { DataSource, Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
@@ -54,7 +54,6 @@ export class RestaurantService {
     async insert(createRestaurantDto: CreateRestaurantDto) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
-        await queryRunner.startTransaction();
 
         const personDto = {
             email: createRestaurantDto.email,
@@ -91,11 +90,11 @@ export class RestaurantService {
 
         // restaurant creation transaction
         let restaurant: Restaurant = this.restaurantRepository.create({
-            name: createRestaurantDto.name,
+            name: createRestaurantDto.name.toLowerCase(),
             url: createRestaurantDto.url,
-            category: createRestaurantDto.category
+            category: createRestaurantDto.category.toLowerCase()
         });
-        // await queryRunner.startTransaction();
+        await queryRunner.startTransaction();
         try {
             // save person
             const personDbReference = await queryRunner.manager.save(person);
@@ -129,24 +128,44 @@ export class RestaurantService {
         return restaurant;
     }
 
-    async acceptOrders(ordersId: number[]): Promise<Order[]> {
+    async changeOrderStatus(
+        ordersId: number[],
+        restaurantId: number,
+        status: OrderStatus
+    ): Promise<Order[]> {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
-            const orders = await this.orderService.getOrders(ordersId);
-
+            const orders = await this.orderService.getOrders(
+                ordersId,
+                restaurantId
+            );
+            if (!orders) {
+                throw new Error("Operation forbidden");
+            }
             // update orders
             for (let order of orders) {
-                order.status = OrderStatus.PREPARATION_START;
+                order.status = status;
             }
             // save orders
             const ordersDbReference = await queryRunner.manager.save(orders);
             await queryRunner.commitTransaction();
 
             return ordersDbReference;
-        } catch (e) {
+        } catch (e: any) {
             await queryRunner.rollbackTransaction();
+            if (e.message === "Operation forbidden") {
+                throw new HttpException(
+                    "Operation forbidden",
+                    HttpStatus.FORBIDDEN
+                );
+            } else {
+                throw new HttpException(
+                    "Internal server error",
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                );
+            }
         } finally {
             await queryRunner.release();
         }
@@ -204,6 +223,7 @@ export class RestaurantService {
             if (result) {
                 // return payload of jwt
                 return {
+                    id: restaurant.id,
                     name: restaurant.name,
                     address: restaurant.person.address,
                     phone: restaurant.person.phone,

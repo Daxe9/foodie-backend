@@ -14,9 +14,4 @@ import { UpdatePersonDto } from "./dto/update-person.dto";
 @Controller("person")
 export class PersonController {
     constructor(private readonly personService: PersonService) {}
-
-    @Post()
-    create(@Body() createPersonDto: CreatePersonDto) {
-        return this.personService.insert(createPersonDto);
-    }
 }

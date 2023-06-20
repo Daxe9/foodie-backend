@@ -1,0 +1,26 @@
+[
+  {
+    "firstName": "Mattone",
+    "lastName": "FALLONE",
+    "email": "FALLONE.matteo@itismeucci.com",
+    "password": "HounFall0Grosso!",
+    "phone": "3333333333",
+    "address": "Via G 45"
+  },
+  {
+    "firstName": "Andrew",
+    "lastName": "Tate",
+    "email": "andrew@tate.com",
+    "password": "Iamfinallyfree123!",
+    "phone": "3333333333",
+    "address": "Via G 42"
+  },
+  {
+    "firstName": "Marco",
+    "lastName": "Togni",
+    "email": "1@2.com",
+    "password": "tRONCOINEXTREMIS!1!",
+    "phone": "3317126490",
+    "address": "Via Pacciugo 39"
+  }
+]

@@ -48,7 +48,6 @@ export class OrderService {
             totalPrice += Number(item.price);
         }
 
-
         // start transaction
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -125,13 +124,14 @@ export class OrderService {
         return this.userService.findOne(email);
     }
 
-    async getOrders(ordersId: number[]) {
+    async getOrders(ordersId: number[], restaurantId: number) {
         const orders: Order[] = [];
 
         for (const orderId of ordersId) {
             const order = await this.orderRepository.findOne({
                 where: {
-                    id: orderId
+                    id: orderId,
+                    restaurant: { id: restaurantId }
                 }
             });
             if (order) {
@@ -139,6 +139,6 @@ export class OrderService {
             }
         }
 
-        return orders;
+        return ordersId.length === orders.length ? orders : null;
     }
 }

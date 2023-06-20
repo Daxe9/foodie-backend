@@ -1,35 +1,70 @@
-import { IsMobilePhone, IsOptional, IsString, Length } from "class-validator";
+import {
+    IsDefined,
+    IsMobilePhone,
+    IsNotEmptyObject,
+    IsObject,
+    IsOptional,
+    IsString,
+    Length,
+    Validate,
+    ValidateNested
+} from "class-validator";
 import { Type } from "class-transformer";
+import { CustomSingleDayTimeValidator } from "./CustomTimetableValidator";
 
 export class SingleDay {
-    @IsString()
-    @IsOptional()
+    @Validate(CustomSingleDayTimeValidator)
     opening1: string;
-    @IsString()
-    @IsOptional()
+    @Validate(CustomSingleDayTimeValidator)
     opening2: string;
 
-    @IsString()
-    @IsOptional()
+    @Validate(CustomSingleDayTimeValidator)
     closing1: string;
-    @IsString()
-    @IsOptional()
+    @Validate(CustomSingleDayTimeValidator)
     closing2: string;
 }
 
 export class Timetable {
+    @IsDefined()
+    @IsNotEmptyObject()
+    @IsObject()
+    @ValidateNested()
     @Type(() => SingleDay)
     monday: SingleDay;
+    @IsDefined()
+    @IsNotEmptyObject()
+    @IsObject()
+    @ValidateNested()
     @Type(() => SingleDay)
     tuesday: SingleDay;
+    @IsDefined()
+    @IsNotEmptyObject()
+    @IsObject()
+    @ValidateNested()
     @Type(() => SingleDay)
     wednesday: SingleDay;
+    @IsDefined()
+    @IsNotEmptyObject()
+    @IsObject()
+    @ValidateNested()
     @Type(() => SingleDay)
     thursday: SingleDay;
+    @IsDefined()
+    @IsNotEmptyObject()
+    @IsObject()
+    @ValidateNested()
     @Type(() => SingleDay)
     friday: SingleDay;
+    @IsDefined()
+    @IsNotEmptyObject()
+    @IsObject()
+    @ValidateNested()
     @Type(() => SingleDay)
     saturday: SingleDay;
+    @IsDefined()
+    @IsNotEmptyObject()
+    @IsObject()
+    @ValidateNested()
     @Type(() => SingleDay)
     sunday: SingleDay;
 }
@@ -61,6 +96,10 @@ export class CreateRestaurantDto {
     @IsMobilePhone("it-IT")
     phone: string;
 
+    @IsDefined()
+    @IsNotEmptyObject()
+    @IsObject()
+    @ValidateNested()
     @Type(() => Timetable)
     timetable: Timetable;
 }

@@ -20,6 +20,7 @@ export class LocalStrategy extends PassportStrategy(
         email: string,
         password: string
     ): Promise<RestaurantPayload> {
+        email = email.toLowerCase();
         const restaurant = await this.restaurantService.validateUser(
             email,
             password
