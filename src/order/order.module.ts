@@ -22,7 +22,6 @@ import { RiderService } from "../rider/rider.service";
         UserModule,
         PersonModule,
         ItemModule,
-        RiderModule,
         TypeOrmModule.forFeature([Order, User, Item, Person, Rider]),
         JwtModule
     ],
@@ -32,8 +31,7 @@ import { RiderService } from "../rider/rider.service";
         UserService,
         PersonService,
         ItemService,
-        JwtService,
-        RiderService
+        JwtService
     ]
 })
 export class OrderModule {}

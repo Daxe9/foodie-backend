@@ -19,7 +19,6 @@ export class OrderService {
         private readonly userService: UserService,
         private readonly personService: PersonService,
         private readonly itemService: ItemService,
-        private readonly riderService: RiderService,
         private readonly dataSource: DataSource
     ) {}
 
@@ -60,31 +59,12 @@ export class OrderService {
                 total: totalPrice,
                 status: OrderStatus.PENDING
             });
+            // create relationships
             order.restaurant = <any>{ id: createOrderDto.restaurantId };
             order.user = user;
             order.items = [...items];
 
-            const availableRiders =
-                await this.riderService.getAvailableRiders();
-            // TODO: no riders available
-            const notAvailable =
-                availableRiders.length <= 0
-                    ? "No riders available for now"
-                    : null;
-
-            // choose a random rider from the list if the list is not empty
-            let randomRider: Rider | null = null;
-            if (!notAvailable) {
-                randomRider =
-                    availableRiders[
-                        Math.floor(Math.random() * availableRiders.length)
-                    ];
-                randomRider.isAvailable = false;
-
-                order.rider = randomRider;
-                await queryRunner.manager.save(randomRider);
-            }
-
+            // save order and get reference
             const orderDbReference = await queryRunner.manager.save(
                 Order,
                 order
@@ -98,15 +78,6 @@ export class OrderService {
                 orderId: orderDbReference.id,
                 restaurantId: createOrderDto.restaurantId
             };
-
-            if (notAvailable) {
-                result["message"] = notAvailable;
-            } else {
-                result["rider"] = {
-                    id: randomRider!.id,
-                    phone: randomRider!.person.phone
-                };
-            }
 
             return result;
         } catch (err) {
@@ -124,7 +95,7 @@ export class OrderService {
         return this.userService.findOne(email);
     }
 
-    async getOrders(ordersId: number[], restaurantId: number) {
+    async getOrdersRestaurant(ordersId: number[], restaurantId: number) {
         const orders: Order[] = [];
 
         for (const orderId of ordersId) {
@@ -140,5 +111,30 @@ export class OrderService {
         }
 
         return ordersId.length === orders.length ? orders : null;
+    }
+
+    async getOrdersRider(
+        ordersId: number[],
+        riderId: number
+    ): Promise<Order[]> | null {
+        const orders: Order[] = [];
+
+        for (const orderId of ordersId) {
+            const order = await this.orderRepository.findOne({
+                where: {
+                    id: orderId,
+                    rider: { id: riderId }
+                }
+            });
+            if (order) {
+                orders.push(order);
+            }
+        }
+
+        return ordersId.length === orders.length ? orders : null;
+    }
+
+    async saveOrders(orders: Order[]) {
+        return this.orderRepository.save(orders);
     }
 }

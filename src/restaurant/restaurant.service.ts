@@ -13,6 +13,8 @@ import { PersonService } from "../person/person.service";
 import { CreateSingleDayDto } from "../person/dto/create-single-day.dto";
 import { Order, OrderStatus } from "../order/entities/order.entity";
 import { OrderService } from "../order/order.service";
+import { RiderService } from "../rider/rider.service";
+import { Rider } from "../rider/entities/rider.entity";
 
 @Injectable()
 export class RestaurantService {
@@ -26,6 +28,7 @@ export class RestaurantService {
         @InjectRepository(Item)
         private itemRepository: Repository<Item>,
         private orderService: OrderService,
+        private riderService: RiderService,
         private dataSource: DataSource,
         private personService: PersonService,
         private jwtService: JwtService
@@ -137,7 +140,7 @@ export class RestaurantService {
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
-            const orders = await this.orderService.getOrders(
+            const orders = await this.orderService.getOrdersRestaurant(
                 ordersId,
                 restaurantId
             );
@@ -148,11 +151,59 @@ export class RestaurantService {
             for (let order of orders) {
                 order.status = status;
             }
+
+            // assign random rider
+            const availableRiders =
+                await this.riderService.getAvailableRiders();
+
+            const result = [];
+
+            for (let order of orders) {
+                // TODO: no riders available
+                const notAvailable =
+                    availableRiders.length <= 0
+                        ? "No riders available for now"
+                        : null;
+
+                // choose a random rider from the list if the list is not empty
+                let randomRider: Rider | null = null;
+                if (!notAvailable) {
+                    randomRider =
+                        availableRiders[
+                            Math.floor(Math.random() * availableRiders.length)
+                        ];
+                    randomRider.isAvailable = false;
+                    // remove random rider from the list
+                    availableRiders.splice(
+                        availableRiders.indexOf(randomRider),
+                        1
+                    );
+                    order.rider = randomRider;
+                    await queryRunner.manager.save(randomRider);
+                }
+
+                const info = {
+                    orderId: order.id,
+                    address: order.address,
+                    phone: order.phone,
+                    total: order.total
+                };
+                if (notAvailable) {
+                    info["message"] = "No riders available for now";
+                } else {
+                    info["rider"] = {
+                        id: randomRider!.id,
+                        phone: randomRider!.person.phone
+                    };
+                }
+                result.push(info);
+            }
+
             // save orders
             const ordersDbReference = await queryRunner.manager.save(orders);
             await queryRunner.commitTransaction();
 
-            return ordersDbReference;
+            return result;
         } catch (e: any) {
             await queryRunner.rollbackTransaction();
             if (e.message === "Operation forbidden") {

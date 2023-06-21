@@ -93,7 +93,11 @@ export class CreateRestaurantDto {
     @Length(1)
     address: string;
 
-    @IsMobilePhone("it-IT")
+    @IsMobilePhone(
+        "it-IT",
+        {},
+        { message: "Phone number must be an Italian number" }
+    )
     phone: string;
 
     @IsDefined()

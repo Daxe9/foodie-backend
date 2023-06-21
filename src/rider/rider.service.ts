@@ -6,6 +6,9 @@ import { CreateRiderDto } from "./dto/create-rider.dto";
 import { PersonService } from "../person/person.service";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
+import { UserService } from "../user/user.service";
+import { OrderStatus } from "../order/entities/order.entity";
+import { OrderService } from "../order/order.service";
 
 export type RiderPayload = {
     id: number;
@@ -19,6 +22,7 @@ export class RiderService {
         @InjectRepository(Rider)
         private riderRepository: Repository<Rider>,
         private personService: PersonService,
+        private orderService: OrderService,
         private jwtService: JwtService
     ) {}
 
@@ -97,7 +101,7 @@ export class RiderService {
         }
     }
 
-    async active(id: number) {
+    async changeStatus(id: number, status: boolean) {
         const rider = await this.riderRepository.findOne({
             where: {
                 id
@@ -106,7 +110,7 @@ export class RiderService {
         if (!rider) {
             throw new HttpException("Rider not found", HttpStatus.NOT_FOUND);
         }
-        rider.isAvailable = true;
+        rider.isAvailable = status;
         const riderDbReference = await this.riderRepository.save(rider);
         return riderDbReference;
     }
@@ -117,5 +121,25 @@ export class RiderService {
         return {
             access_token: this.jwtService.sign(rider)
         };
+    }
+
+    async changeOrderStatus(
+        ordersId: number[],
+        riderId: number,
+        status: OrderStatus
+    ) {
+        const orders = await this.orderService.getOrdersRider(
+            ordersId,
+            riderId
+        );
+        if (!orders) {
+            throw new HttpException("Order not found", HttpStatus.FORBIDDEN);
+        }
+
+        for (const order of orders) {
+            order.status = status;
+        }
+        const ordersDbReference = await this.orderService.saveOrders(orders);
+        return ordersDbReference;
     }
 }

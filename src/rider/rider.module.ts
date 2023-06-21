@@ -12,8 +12,18 @@ import { JwtStrategy } from "../jwt/jwt.strategy";
 import { ConfigService } from "@nestjs/config";
 import { CustomJwtModule } from "../jwt/jwt.module";
 import { PassportModule } from "@nestjs/passport";
+import { Order } from "../order/entities/order.entity";
+import { OrderService } from "../order/order.service";
+import { OrderModule } from "../order/order.module";
+import { UserModule } from "../user/user.module";
+import { UserService } from "../user/user.service";
+import { ItemModule } from "../item/item.module";
+import { ItemService } from "../item/item.service";
+import { User } from "../user/entities/user.entity";
+import { Item } from "../item/entities/item.entity";
 
 @Module({
+    controllers: [RiderController],
     imports: [
         CustomJwtModule,
         JwtModule.registerAsync({
@@ -25,11 +35,21 @@ import { PassportModule } from "@nestjs/passport";
                 }
             })
         }),
+        OrderModule,
         PassportModule,
         PersonModule,
-        TypeOrmModule.forFeature([Rider, Person])
+        UserModule,
+        ItemModule,
+        TypeOrmModule.forFeature([Rider, Person, Order, User, Item])
     ],
-    controllers: [RiderController],
-    providers: [RiderService, PersonService, LocalStrategy, JwtStrategy]
+    providers: [
+        RiderService,
+        PersonService,
+        LocalStrategy,
+        JwtStrategy,
+        OrderService,
+        UserService,
+        ItemService
+    ]
 })
 export class RiderModule {}

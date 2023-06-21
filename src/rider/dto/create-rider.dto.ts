@@ -8,7 +8,11 @@ export class CreateRiderDto {
     password: string;
 
     // international standard support up to 15 digits
-    @IsMobilePhone("it-IT")
+    @IsMobilePhone(
+        "it-IT",
+        {},
+        { message: "Phone number must be an Italian number" }
+    )
     phone: string;
 
     @IsString()
