@@ -1,7 +1,6 @@
-import { MigrationInterface, QueryRunner } from "typeorm"
+import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class CreateTables1686815288244 implements MigrationInterface {
-
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE \`person\` (
 \t\`id\` INT AUTO_INCREMENT NOT NULL,
@@ -9,8 +8,9 @@ export class CreateTables1686815288244 implements MigrationInterface {
 \t\`password\` VARCHAR(255) NOT NULL, 
 \t\`phone\` VARCHAR(15) NOT NULL, 
 \t\`address\` VARCHAR(255) NOT NULL,
+\t\`role\` ENUM('user', 'restaurant', 'rider') NOT NULL,
     PRIMARY KEY(\`id\`)
-);`)
+);`);
 
         await queryRunner.query(`CREATE TABLE \`user\` ( 
 \t\`id\` INT AUTO_INCREMENT NOT NULL,
@@ -19,7 +19,7 @@ export class CreateTables1686815288244 implements MigrationInterface {
     \`personId\` INT NOT NULL,
 \tCONSTRAINT \`FK_user_person\` FOREIGN KEY (\`personId\`) REFERENCES \`person\` (\`id\`),
 \tPRIMARY KEY(\`id\`)    
-); `)
+); `);
 
         await queryRunner.query(`CREATE TABLE \`singleDay\` (
 \t\`id\` INT NOT NULL AUTO_INCREMENT,
@@ -28,8 +28,7 @@ export class CreateTables1686815288244 implements MigrationInterface {
     \`opening2\` TIME,
     \`closing2\` TIME,
     PRIMARY KEY(\`id\`)
-);`)
-
+);`);
 
         await queryRunner.query(`CREATE TABLE \`timetable\` (
 \t\`id\` INT NOT NULL AUTO_INCREMENT,
@@ -48,7 +47,7 @@ export class CreateTables1686815288244 implements MigrationInterface {
     CONSTRAINT \`FK_timetable_singleDay6\` FOREIGN KEY (\`saturdayId\`) REFERENCES \`singleDay\`(\`id\`),
     CONSTRAINT \`FK_timetable_singleDay7\` FOREIGN KEY (\`sundayId\`) REFERENCES \`singleDay\`(\`id\`),
     PRIMARY KEY(\`id\`)
-);`)
+);`);
 
         await queryRunner.query(`CREATE TABLE \`restaurant\` ( 
 \t\`id\` INT AUTO_INCREMENT NOT NULL,
@@ -60,7 +59,7 @@ export class CreateTables1686815288244 implements MigrationInterface {
 \tCONSTRAINT \`FK_restaurant_person\` FOREIGN KEY (\`personId\`) REFERENCES \`person\` (\`id\`),
 \tCONSTRAINT \`FK_restaurant_timetable\` FOREIGN KEY (\`timetableId\`) REFERENCES \`timetable\`(\`id\`),
     PRIMARY KEY(\`id\`)
-); `)
+); `);
 
         await queryRunner.query(`CREATE TABLE \`rider\` (
 \t\`id\` INT AUTO_INCREMENT NOT NULL,
@@ -68,7 +67,7 @@ export class CreateTables1686815288244 implements MigrationInterface {
 \t\`isAvailable\` BOOLEAN NOT NULL,
 \tCONSTRAINT \`FK_rider_person\` FOREIGN KEY (\`personId\`) REFERENCES \`person\` (\`id\`),
     PRIMARY KEY(\`id\`)
-);`)
+);`);
         await queryRunner.query(`CREATE TABLE \`item\` ( 
 \t\`id\` INT NOT NULL AUTO_INCREMENT, 
 \t\`name\` VARCHAR(255) NOT NULL, 
@@ -78,7 +77,7 @@ export class CreateTables1686815288244 implements MigrationInterface {
 \t\`price\` DECIMAL(10, 2) NOT NULL, PRIMARY KEY (\`id\`), 
 \tCONSTRAINT  \`FK_item_restaurant\` FOREIGN KEY (\`restaurantId\`) REFERENCES \`restaurant\` (\`id\`) 
 );
-`)
+`);
         await queryRunner.query(`CREATE TABLE \`order\` ( 
 \t\`id\` INT NOT NULL AUTO_INCREMENT, 
 \t\`address\` VARCHAR(255) NOT NULL,
@@ -94,7 +93,7 @@ export class CreateTables1686815288244 implements MigrationInterface {
 \tCONSTRAINT \`FK_order_riderId\` FOREIGN KEY (\`riderId\`) REFERENCES \`rider\` (\`id\`),
 \tCONSTRAINT \`FK_order_restaurantId\` FOREIGN KEY (\`restaurantId\`) REFERENCES \`restaurant\` (\`id\`)
 );
-`)
+`);
         await queryRunner.query(`CREATE TABLE \`itemOrder\` ( 
 \t\`id\` INT NOT NULL AUTO_INCREMENT,
 \t\`itemId\` INT NOT NULL, 
@@ -103,7 +102,7 @@ export class CreateTables1686815288244 implements MigrationInterface {
 \tCONSTRAINT \`FK_itemOrder_itemId\` FOREIGN KEY (\`itemId\`) REFERENCES \`item\` (\`id\`), 
 \tCONSTRAINT \`FK_itemOrder_orderId\` FOREIGN KEY (\`orderId\`) REFERENCES \`order\` (\`id\`) 
 ); 
-`)
+`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
@@ -117,7 +116,6 @@ export class CreateTables1686815288244 implements MigrationInterface {
             DROP Table "item";
             DROP Table "order";
             DROP Table "rider"; 
-        `)
+        `);
     }
-
 }

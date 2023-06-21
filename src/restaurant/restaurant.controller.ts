@@ -23,6 +23,8 @@ import { CreateItemDto } from "../item/dto/create-item.dto";
 import { GetOrdersDto } from "./dto/get-orders.dto";
 import { Order, OrderStatus } from "../order/entities/order.entity";
 import { ChangeOrderStatusDto } from "../order/dto/change-order-status.dto";
+import { Auth } from "../decorators/auth.decorator";
+import { Role } from "../person/entities/person.entity";
 
 @Controller("restaurant")
 export class RestaurantController {
@@ -91,7 +93,7 @@ export class RestaurantController {
         return this.restaurantService.login(req.user as RestaurantPayload);
     }
 
-    @UseGuards(JwtAuthGuard)
+    @Auth(Role.RESTAURANT)
     @Get("/profile")
     async getProfile(@Request() req) {
         const restaurant: Restaurant = await this.restaurantService.findOne(
@@ -102,7 +104,7 @@ export class RestaurantController {
         return restaurant;
     }
 
-    @UseGuards(JwtAuthGuard)
+    @Auth(Role.RESTAURANT)
     @Get("/orders")
     async getOrders(@Request() req, @Body() getOrdersDto: GetOrdersDto) {
         const restaurant: Restaurant | null =
@@ -131,7 +133,7 @@ export class RestaurantController {
         return { day: getOrdersDto.day, orders: newOrdersOfTheDay };
     }
 
-    @UseGuards(JwtAuthGuard)
+    @Auth(Role.RESTAURANT)
     @Patch("/updateMenu")
     async addItems(@Request() req, @Body() updateItemsDto: UpdateItemsDto) {
         const restaurant: Restaurant = await this.restaurantService.findOne(
@@ -189,7 +191,7 @@ export class RestaurantController {
         };
     }
 
-    @UseGuards(JwtAuthGuard)
+    @Auth(Role.RESTAURANT)
     @HttpCode(200)
     @Post("/orders/accept")
     async acceptOrders(
@@ -198,13 +200,13 @@ export class RestaurantController {
     ) {
         const orders: Order[] = await this.restaurantService.changeOrderStatus(
             changeOrderStatusDto.ordersId,
-            req.user.id,
+            req.user.email,
             OrderStatus.PREPARATION_START
         );
         return orders;
     }
 
-    @UseGuards(JwtAuthGuard)
+    @Auth(Role.RESTAURANT)
     @HttpCode(200)
     @Post("/orders/done")
     async doneOrders(
@@ -213,7 +215,7 @@ export class RestaurantController {
     ) {
         const orders: Order[] = await this.restaurantService.changeOrderStatus(
             changeOrderStatusDto.ordersId,
-            req.user.id,
+            req.user.email,
             OrderStatus.PREPARATION_END
         );
         return orders;

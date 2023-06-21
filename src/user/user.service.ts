@@ -5,7 +5,7 @@ import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
-import { Person } from "../person/entities/person.entity";
+import { Person, Role } from "../person/entities/person.entity";
 import { PersonService } from "../person/person.service";
 
 @Injectable()
@@ -26,7 +26,8 @@ export class UserService {
             email: createUserDto.email,
             password: createUserDto.password,
             phone: createUserDto.phone,
-            address: createUserDto.address
+            address: createUserDto.address,
+            role: Role.USER
         };
         const person = await this.personService.save(personDto);
         const user = this.userRepository.create({
@@ -72,7 +73,8 @@ export class UserService {
                 return {
                     firstName: user.firstName,
                     lastName: user.lastName,
-                    email: user.person.email
+                    email: user.person.email,
+                    role: user.person.role
                 };
             } else {
                 throw new Error();

@@ -3,10 +3,29 @@ import { PersonService } from "./person.service";
 import { PersonController } from "./person.controller";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Person } from "./entities/person.entity";
+import { LocalStrategy } from "./local.strategy";
+import { JwtModule, JwtService } from "@nestjs/jwt";
+import { ConfigService } from "@nestjs/config";
+import { PassportModule } from "@nestjs/passport";
+import { CustomJwtModule } from "../jwt/jwt.module";
+import { JwtStrategy } from "../jwt/jwt.strategy";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Person])],
     controllers: [PersonController],
-    providers: [PersonService]
+    imports: [
+        CustomJwtModule,
+        PassportModule,
+        JwtModule.registerAsync({
+            inject: [ConfigService],
+            useFactory: async (configService: ConfigService) => ({
+                secret: configService.get<string>("JWT_SECRET") || "secret",
+                signOptions: {
+                    expiresIn: "1h"
+                }
+            })
+        }),
+        TypeOrmModule.forFeature([Person])
+    ],
+    providers: [PersonService, LocalStrategy, JwtStrategy]
 })
 export class PersonModule {}

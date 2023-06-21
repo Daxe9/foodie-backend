@@ -8,7 +8,7 @@ import {
     OneToOne,
     JoinColumn
 } from "typeorm";
-import { Person } from "../../person/entities/person.entity";
+import { Person, Role } from "../../person/entities/person.entity";
 import { Timetable } from "./timetable.entity";
 import { Order } from "../../order/entities/order.entity";
 
@@ -18,6 +18,7 @@ export type RestaurantPayload = {
     name: string;
     address: string;
     phone: string;
+    role: Role;
 };
 
 @Entity()

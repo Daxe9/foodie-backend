@@ -95,15 +95,20 @@ export class OrderService {
         return this.userService.findOne(email);
     }
 
-    async getOrdersRestaurant(ordersId: number[], restaurantId: number) {
+    async getOrdersRestaurant(ordersId: number[], email: string) {
         const orders: Order[] = [];
 
         for (const orderId of ordersId) {
             const order = await this.orderRepository.findOne({
                 where: {
                     id: orderId,
-                    restaurant: { id: restaurantId }
-                }
+                    restaurant: {
+                        person: {
+                            email
+                        }
+                    }
+                },
+                relations: ["rider"]
             });
             if (order) {
                 orders.push(order);
@@ -115,7 +120,7 @@ export class OrderService {
 
     async getOrdersRider(
         ordersId: number[],
-        riderId: number
+        riderEmail: string
     ): Promise<Order[]> | null {
         const orders: Order[] = [];
 
@@ -123,7 +128,11 @@ export class OrderService {
             const order = await this.orderRepository.findOne({
                 where: {
                     id: orderId,
-                    rider: { id: riderId }
+                    rider: {
+                        person: {
+                            email: riderEmail
+                        }
+                    }
                 }
             });
             if (order) {

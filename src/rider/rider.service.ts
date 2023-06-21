@@ -1,20 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Rider } from "./entities/rider.entity";
+import { Rider, RiderPayload } from "./entities/rider.entity";
 import { CreateRiderDto } from "./dto/create-rider.dto";
 import { PersonService } from "../person/person.service";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
-import { UserService } from "../user/user.service";
 import { OrderStatus } from "../order/entities/order.entity";
 import { OrderService } from "../order/order.service";
-
-export type RiderPayload = {
-    id: number;
-    email: string;
-    phone: string;
-};
+import { Role } from "../person/entities/person.entity";
 
 @Injectable()
 export class RiderService {
@@ -31,7 +25,8 @@ export class RiderService {
             email: createRider.email,
             password: createRider.password,
             phone: createRider.phone,
-            address: createRider.address
+            address: createRider.address,
+            role: Role.RIDER
         };
 
         const person = await this.personService.save(personDto);
@@ -74,7 +69,7 @@ export class RiderService {
         });
     }
 
-    async validateUser(email: string, password: string) {
+    async validateUser(email: string, password: string): Promise<RiderPayload> {
         try {
             const rider: Rider | null = await this.findOne(email);
             if (!rider) {
@@ -91,7 +86,8 @@ export class RiderService {
                 return {
                     id: rider.id,
                     email: rider.person.email,
-                    phone: rider.person.phone
+                    phone: rider.person.phone,
+                    role: rider.person.role
                 };
             } else {
                 throw new Error();
@@ -101,18 +97,19 @@ export class RiderService {
         }
     }
 
-    async changeStatus(id: number, status: boolean) {
+    async changeStatus(email: string, status: boolean) {
         const rider = await this.riderRepository.findOne({
             where: {
-                id
+                person: {
+                    email
+                }
             }
         });
         if (!rider) {
             throw new HttpException("Rider not found", HttpStatus.NOT_FOUND);
         }
         rider.isAvailable = status;
-        const riderDbReference = await this.riderRepository.save(rider);
-        return riderDbReference;
+        return await this.riderRepository.save(rider);
     }
 
     async login(rider: RiderPayload): Promise<{
@@ -125,18 +122,24 @@ export class RiderService {
 
     async changeOrderStatus(
         ordersId: number[],
-        riderId: number,
+        riderEmail: string,
         status: OrderStatus
     ) {
         const orders = await this.orderService.getOrdersRider(
             ordersId,
-            riderId
+            riderEmail
         );
         if (!orders) {
             throw new HttpException("Order not found", HttpStatus.FORBIDDEN);
         }
 
         for (const order of orders) {
+            if (order.status === status) {
+                throw new HttpException(
+                    "Order already in this status",
+                    HttpStatus.CONFLICT
+                );
+            }
             order.status = status;
         }
         const ordersDbReference = await this.orderService.saveOrders(orders);

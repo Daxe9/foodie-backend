@@ -49,7 +49,6 @@ import { Person } from "./person/entities/person.entity";
                 ]
             })
         }),
-        TypeOrmModule.forFeature([User]),
         RestaurantModule,
         UserModule,
         UtilsModule,

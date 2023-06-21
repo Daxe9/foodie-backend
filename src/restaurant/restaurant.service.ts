@@ -8,7 +8,7 @@ import { Timetable } from "./entities/timetable.entity";
 import { SingleDay } from "./entities/singleDay.entity";
 import { CreateRestaurantDto } from "./dto/create-restaurant.dto";
 import { Item } from "../item/entities/item.entity";
-import { Person } from "../person/entities/person.entity";
+import { Person, Role } from "../person/entities/person.entity";
 import { PersonService } from "../person/person.service";
 import { CreateSingleDayDto } from "../person/dto/create-single-day.dto";
 import { Order, OrderStatus } from "../order/entities/order.entity";
@@ -62,7 +62,8 @@ export class RestaurantService {
             email: createRestaurantDto.email,
             password: createRestaurantDto.password,
             phone: createRestaurantDto.phone,
-            address: createRestaurantDto.address
+            address: createRestaurantDto.address,
+            role: Role.RESTAURANT
         };
         // create a person
         const person = this.personService.create(personDto);
@@ -133,7 +134,7 @@ export class RestaurantService {
 
     async changeOrderStatus(
         ordersId: number[],
-        restaurantId: number,
+        restaurantEmail: string,
         status: OrderStatus
     ): Promise<Order[]> {
         const queryRunner = this.dataSource.createQueryRunner();
@@ -142,13 +143,16 @@ export class RestaurantService {
         try {
             const orders = await this.orderService.getOrdersRestaurant(
                 ordersId,
-                restaurantId
+                restaurantEmail
             );
             if (!orders) {
                 throw new Error("Operation forbidden");
             }
             // update orders
             for (let order of orders) {
+                if (order.status === status) {
+                    throw new Error("Order already in this status");
+                }
                 order.status = status;
             }
 
@@ -159,42 +163,43 @@ export class RestaurantService {
             const result = [];
 
             for (let order of orders) {
-                // TODO: no riders available
-                const notAvailable =
-                    availableRiders.length <= 0
-                        ? "No riders available for now"
-                        : null;
-
-                // choose a random rider from the list if the list is not empty
-                let randomRider: Rider | null = null;
-                if (!notAvailable) {
-                    randomRider =
-                        availableRiders[
-                            Math.floor(Math.random() * availableRiders.length)
-                        ];
-                    randomRider.isAvailable = false;
-                    // remove random rider from the list
-                    availableRiders.splice(
-                        availableRiders.indexOf(randomRider),
-                        1
-                    );
-                    order.rider = randomRider;
-                    await queryRunner.manager.save(randomRider);
-                }
-
                 const info = {
                     orderId: order.id,
                     address: order.address,
                     phone: order.phone,
                     total: order.total
                 };
-                if (notAvailable) {
-                    info["message"] = "No riders available for now";
-                } else {
-                    info["rider"] = {
-                        id: randomRider!.id,
-                        phone: randomRider!.person.phone
-                    };
+
+                if (!order.rider) {
+                    // TODO: no riders available
+                    const notAvailable = availableRiders.length <= 0;
+                    // choose a random rider from the list if the list is not empty
+                    let randomRider: Rider | null = null;
+                    if (!notAvailable) {
+                        randomRider =
+                            availableRiders[
+                                Math.floor(
+                                    Math.random() * availableRiders.length
+                                )
+                            ];
+                        randomRider.isAvailable = false;
+                        // remove random rider from the list
+                        availableRiders.splice(
+                            availableRiders.indexOf(randomRider),
+                            1
+                        );
+                        order.rider = randomRider;
+                        await queryRunner.manager.save(randomRider);
+                    }
+
+                    if (notAvailable) {
+                        info["message"] = "No riders available for now";
+                    } else {
+                        info["rider"] = {
+                            id: randomRider!.id,
+                            phone: randomRider!.person.phone
+                        };
+                    }
                 }
                 result.push(info);
             }
@@ -207,10 +212,9 @@ export class RestaurantService {
         } catch (e: any) {
             await queryRunner.rollbackTransaction();
             if (e.message === "Operation forbidden") {
-                throw new HttpException(
-                    "Operation forbidden",
-                    HttpStatus.FORBIDDEN
-                );
+                throw new HttpException(e.message, HttpStatus.FORBIDDEN);
+            } else if (e.message === "The order is already in this status") {
+                throw new HttpException(e.message, HttpStatus.CONFLICT);
             } else {
                 throw new HttpException(
                     "Internal server error",
@@ -278,7 +282,8 @@ export class RestaurantService {
                     name: restaurant.name,
                     address: restaurant.person.address,
                     phone: restaurant.person.phone,
-                    email: restaurant.person.email
+                    email: restaurant.person.email,
+                    role: restaurant.person.role
                 };
             } else {
                 throw new Error();

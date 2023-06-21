@@ -1,23 +1,21 @@
 import {
-    Controller,
-    Post,
     Body,
-    Patch,
-    Param,
-    Delete,
-    Request,
+    Controller,
+    Get,
+    HttpCode,
     HttpException,
     HttpStatus,
-    UseGuards,
-    Get,
-    HttpCode
+    Post,
+    Request,
+    UseGuards
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UtilsService } from "../utils/utils.service";
 import { User, UserPayload } from "./entities/user.entity";
-import { JwtAuthGuard } from "../jwt/jwt-auth.guard";
 import { AuthGuard } from "@nestjs/passport";
+import { Auth } from "../decorators/auth.decorator";
+import { Role } from "../person/entities/person.entity";
 
 @Controller("user")
 export class UserController {
@@ -84,7 +82,7 @@ export class UserController {
         return this.userService.login(req.user as UserPayload);
     }
 
-    @UseGuards(JwtAuthGuard)
+    @Auth(Role.USER)
     @Get("/profile")
     async getProfile(@Request() req) {
         // return user record from database deleting password from it

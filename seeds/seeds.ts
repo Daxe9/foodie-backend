@@ -1,5 +1,4 @@
-import { CreateUserDto } from "./user/dto/create-user.dto";
-import { CreateRestaurantDto } from "./restaurant/dto/create-restaurant.dto";
+import { CreateUserDto } from "../src/user/dto/create-user.dto";
 
 export const users = [
     {

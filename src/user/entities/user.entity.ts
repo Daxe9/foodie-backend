@@ -10,12 +10,13 @@ import {
     PrimaryGeneratedColumn
 } from "typeorm";
 import { Order } from "../../order/entities/order.entity";
-import { Person } from "../../person/entities/person.entity";
+import { Person, Role } from "../../person/entities/person.entity";
 
 export type UserPayload = {
     firstName: string;
     lastName: string;
     email: string;
+    role: Role;
 };
 
 @Entity()
