@@ -68,19 +68,19 @@
         "closing2": null
       },
       "tuesday": {
-        "opening1": "9:00",
+        "opening1": "09:00",
         "closing1": "15:00",
         "opening2": "18:00",
         "closing2": "23:00"
       },
       "wednesday": {
-        "opening1": "9:00",
+        "opening1": "09:00",
         "closing1": "15:00",
         "opening2": "18:00",
         "closing2": "23:00"
       },
       "thursday": {
-        "opening1": "9:00",
+        "opening1": "09:00",
         "closing1": "15:00",
         "opening2": "18:00",
         "closing2": "23:00"
@@ -98,7 +98,7 @@
         "closing2": null
       },
       "sunday": {
-        "opening1": "9:00",
+        "opening1": "09:00",
         "closing1": "15:00",
         "opening2": null,
         "closing2": null
@@ -155,6 +155,112 @@
         "closing1": "15:00",
         "opening2": "19:00",
         "closing2": "23:00"
+      }
+    }
+  },
+  {
+    "name": "La Pâtisserie",
+    "url": "https://www.lapatisserie.com",
+    "category": "french",
+    "email": "contact@lapatisserie.com",
+    "password": "SweetTreats123!",
+    "phone": "3814695671",
+    "address": "123 Baker Street",
+    "timetable": {
+      "monday": {
+        "opening1": "07:00",
+        "closing1": "18:00",
+        "opening2": null,
+        "closing2": null
+      },
+      "tuesday": {
+        "opening1": "07:00",
+        "closing1": "18:00",
+        "opening2": null,
+        "closing2": null
+      },
+      "wednesday": {
+        "opening1": "07:00",
+        "closing1": "18:00",
+        "opening2": null,
+        "closing2": null
+      },
+      "thursday": {
+        "opening1": "07:00",
+        "closing1": "18:00",
+        "opening2": null,
+        "closing2": null
+      },
+      "friday": {
+        "opening1": "07:00",
+        "closing1": "18:00",
+        "opening2": null,
+        "closing2": null
+      },
+      "saturday": {
+        "opening1": "08:00",
+        "closing1": "17:00",
+        "opening2": null,
+        "closing2": null
+      },
+      "sunday": {
+        "opening1": "09:00",
+        "closing1": "16:00",
+        "opening2": null,
+        "closing2": null
+      }
+    }
+  },
+  {
+    "name": "Ristorante Bella Vita",
+    "url": "https://www.bellavita.com",
+    "category": "Italian",
+    "email": "info@bellavita.com",
+    "password": "BellaVita2023!",
+    "phone": "3338714567",
+    "address": "Via Roma 10",
+    "timetable": {
+      "monday": {
+        "opening1": "11:30",
+        "closing1": "14:30",
+        "opening2": "18:00",
+        "closing2": "23:00"
+      },
+      "tuesday": {
+        "opening1": "11:30",
+        "closing1": "14:30",
+        "opening2": "18:00",
+        "closing2": "23:00"
+      },
+      "wednesday": {
+        "opening1": "11:30",
+        "closing1": "14:30",
+        "opening2": "18:00",
+        "closing2": "23:00"
+      },
+      "thursday": {
+        "opening1": "11:30",
+        "closing1": "14:30",
+        "opening2": "18:00",
+        "closing2": "23:00"
+      },
+      "friday": {
+        "opening1": "11:30",
+        "closing1": "14:30",
+        "opening2": "18:00",
+        "closing2": "23:00"
+      },
+      "saturday": {
+        "opening1": "12:00",
+        "closing1": "15:00",
+        "opening2": "18:30",
+        "closing2": "23:30"
+      },
+      "sunday": {
+        "opening1": "12:00",
+        "closing1": "15:00",
+        "opening2": "18:30",
+        "closing2": "23:30"
       }
     }
   }

@@ -22,5 +22,21 @@
     "password": "tRONCOINEXTREMIS!1!",
     "phone": "3317126490",
     "address": "Via Pacciugo 39"
+  },
+  {
+    "firstName": "Francesco",
+    "lastName": "Capezio",
+    "email": "animatore.digitale@itismeucci.com",
+    "password": "PREND11LP1VoT!!",
+    "phone": "3392345618",
+    "address": "Via Genova 72"
+  },
+  {
+    "firstName": "Sergio",
+    "lastName": "Mattarella",
+    "email": "sessista.immacolato@italia.it",
+    "password": "#N0M0rePresidentPls",
+    "phone": "3328561208",
+    "address": "Via Quirinale 1"
   }
 ]
