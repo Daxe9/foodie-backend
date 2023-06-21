@@ -6,9 +6,7 @@ export class CreatePersonDto {
     email: string;
     @IsString()
     password: string;
-    @IsString({
-        length: 15
-    })
+    @IsString()
     phone: string;
     @IsString()
     address: string;
