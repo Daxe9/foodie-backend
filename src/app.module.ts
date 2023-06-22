@@ -1,5 +1,4 @@
 import { Module } from "@nestjs/common";
-import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { RestaurantModule } from "./restaurant/restaurant.module";
 import { UserModule } from "./user/user.module";
@@ -22,7 +21,6 @@ import { PersonModule } from "./person/person.module";
 import { Person } from "./person/entities/person.entity";
 
 @Module({
-    controllers: [AppController],
     imports: [
         ConfigModule.forRoot({
             isGlobal: true
@@ -61,5 +59,5 @@ import { Person } from "./person/entities/person.entity";
     providers: [AppService]
 })
 export class AppModule {
-    constructor(private dataSource: DataSource) {}
+    constructor(private _: DataSource) {}
 }

@@ -1,9 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { DataSource, Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import * as bcrypt from "bcrypt";
-import { JwtService } from "@nestjs/jwt";
-import { Restaurant, RestaurantPayload } from "./entities/restaurant.entity";
+import { Restaurant } from "./entities/restaurant.entity";
 import { Timetable } from "./entities/timetable.entity";
 import { SingleDay } from "./entities/singleDay.entity";
 import { CreateRestaurantDto } from "./dto/create-restaurant.dto";
@@ -30,18 +28,26 @@ export class RestaurantService {
         private orderService: OrderService,
         private riderService: RiderService,
         private dataSource: DataSource,
-        private personService: PersonService,
-        private jwtService: JwtService
+        private personService: PersonService
     ) {}
 
+    /**
+     * Find a restaurant by email
+     * @param {string} email restaurant email
+     * @param {string} relations relations to load
+     * @returns {Promise<Restaurant | null>} found restaurant or null
+     */
     async findOne(
         email: string,
         relations: string[]
     ): Promise<Restaurant | null> {
+        // find the person
         const person: Person | null = await this.personService.findOne(email);
         if (!person) {
             return null;
         }
+
+        // get restaurant reference
         const restaurant: Restaurant | null =
             await this.restaurantRepository.findOne({
                 where: {
@@ -54,9 +60,15 @@ export class RestaurantService {
         }
         return restaurant;
     }
+
+    /**
+     * Create a restaurant in db
+     * @param {createRestaurantDto} createRestaurantDto dto to create a restaurant
+     * @throws {Error} if transaction goes wrong
+     * @returns {Promise<Restaurant>} created restaurant
+     */
     async insert(createRestaurantDto: CreateRestaurantDto) {
         const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.connect();
 
         const personDto = {
             email: createRestaurantDto.email,
@@ -98,6 +110,7 @@ export class RestaurantService {
             url: createRestaurantDto.url,
             category: createRestaurantDto.category.toLowerCase()
         });
+        await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
             // save person
@@ -110,10 +123,9 @@ export class RestaurantService {
 
             // save single day times
             for (let day of dayTimes) {
-                const singleDayDbReference = await queryRunner.manager.save(
+                timetableDbReference[day.day] = await queryRunner.manager.save(
                     day.singleDay
                 );
-                timetableDbReference[day.day] = singleDayDbReference;
             }
             await queryRunner.manager.save(timetableDbReference);
             // save restaurant
@@ -123,8 +135,8 @@ export class RestaurantService {
 
             await queryRunner.commitTransaction();
         } catch (e) {
-            throw new Error(e.message);
             await queryRunner.rollbackTransaction();
+            throw new Error(e.message);
         } finally {
             await queryRunner.release();
         }
@@ -132,6 +144,16 @@ export class RestaurantService {
         return restaurant;
     }
 
+    /**
+     * Update a list of order status of a restaurant
+     * @param {number[]} ordersId list of order id
+     * @param {string} restaurantEmail restaurant email
+     * @param {OrderStatus} status new status
+     * @throws {HttpException Conflict} if order is already in this status
+     * @throws {HttpException Forbidden} if order is not assigned to this restaurant
+     * @throws {HttpException InternalServerError} if transaction goes wrong
+     * @returns {Promise<Order[]>} updated orders
+     */
     async changeOrderStatus(
         ordersId: number[],
         restaurantEmail: string,
@@ -170,6 +192,7 @@ export class RestaurantService {
                     total: order.total
                 };
 
+                // if order is not assigned to a rider
                 if (!order.rider) {
                     // TODO: no riders available
                     const notAvailable = availableRiders.length <= 0;
@@ -205,7 +228,7 @@ export class RestaurantService {
             }
 
             // save orders
-            const ordersDbReference = await queryRunner.manager.save(orders);
+            await queryRunner.manager.save(orders);
             await queryRunner.commitTransaction();
 
             return result;
@@ -226,18 +249,30 @@ export class RestaurantService {
         }
     }
 
-    async save(restaurant: Restaurant) {
-        return this.restaurantRepository.save(restaurant);
-    }
-
+    /**
+     * Check if the email is present in the database
+     * @param {string} email email to check
+     * @returns {Promise<boolean>} true if the email is present, false otherwise
+     */
     async isPresent(email: string): Promise<boolean> {
         return this.personService.isPresent(email);
     }
 
+    /**
+     * Find all restaurants
+     * @returns {Promise<Restaurant[]>} list of restaurants
+     */
     async findAll(): Promise<Restaurant[]> {
         return this.restaurantRepository.find();
     }
 
+    /**
+     * update restaurant menu
+     * @param {Restaurant} restaurant restaurant to update
+     * @param {Item[]} items new items to add
+     * @throws {HttpException InternalServerError} if transaction goes wrong
+     * @returns {Promise<Item[]>} list of items
+     */
     async updateMenu(restaurant: Restaurant, items: Item[]) {
         const queryRunner = this.dataSource.createQueryRunner();
 
@@ -252,47 +287,20 @@ export class RestaurantService {
             return itemsDbReference;
         } catch (err) {
             await queryRunner.rollbackTransaction();
+            throw new HttpException(
+                "Internal server error",
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
         } finally {
             await queryRunner.release();
         }
     }
 
-    async validateUser(
-        email: string,
-        password: string
-    ): Promise<RestaurantPayload> {
-        try {
-            // find the user
-            const restaurant: Restaurant | null = await this.findOne(email, [
-                "person"
-            ]);
-            if (!restaurant) {
-                throw new Error();
-            }
-            // compare password
-            const result = await bcrypt.compare(
-                password,
-                restaurant.person.password
-            );
-
-            if (result) {
-                // return payload of jwt
-                return {
-                    id: restaurant.id,
-                    name: restaurant.name,
-                    address: restaurant.person.address,
-                    phone: restaurant.person.phone,
-                    email: restaurant.person.email,
-                    role: restaurant.person.role
-                };
-            } else {
-                throw new Error();
-            }
-        } catch (e) {
-            return null;
-        }
-    }
-
+    /**
+     * Get all items from a specific restaurant
+     * @param {string} restaurantName name of the restaurant
+     * @returns {Promise<Item[] | null>} list of items or null if the restaurant is not present
+     */
     async getMenu(restaurantName: string): Promise<Item[] | null> {
         const restaurant: Restaurant = await this.restaurantRepository.findOne({
             where: {
@@ -309,13 +317,5 @@ export class RestaurantService {
         }
 
         return restaurant.items;
-    }
-
-    async login(restaurant: RestaurantPayload): Promise<{
-        accessToken: string;
-    }> {
-        return {
-            accessToken: this.jwtService.sign(restaurant)
-        };
     }
 }

@@ -1,4 +1,4 @@
-import { Role } from "../entities/person.entity";
+import { Role } from "../../person/entities/person.entity";
 import { IsEmail, IsEnum, IsString } from "class-validator";
 
 export class CreatePersonDto {

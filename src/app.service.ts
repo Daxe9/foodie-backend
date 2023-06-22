@@ -1,7 +1,4 @@
-import { Injectable, OnApplicationBootstrap } from "@nestjs/common";
-import { Repository } from "typeorm";
-import { User } from "./user/entities/user.entity";
-import { InjectRepository } from "@nestjs/typeorm";
+import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class AppService {

@@ -7,9 +7,6 @@ import { ItemService } from "../item/item.service";
 import { Order, OrderStatus } from "./entities/order.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DataSource, Repository } from "typeorm";
-import { Item } from "../item/entities/item.entity";
-import { RiderService } from "../rider/rider.service";
-import { Rider } from "../rider/entities/rider.entity";
 
 @Injectable()
 export class OrderService {
@@ -22,6 +19,11 @@ export class OrderService {
         private readonly dataSource: DataSource
     ) {}
 
+    /**
+     * Create an order
+     * @param {CreateOrderDto} createOrderDto order data
+     * @param {User} user user entity
+     */
     async create(createOrderDto: CreateOrderDto, user: User) {
         const queryRunner = this.dataSource.createQueryRunner();
         const items = await this.itemService.getItems(
@@ -72,14 +74,12 @@ export class OrderService {
 
             await queryRunner.commitTransaction();
 
-            const result = {
+            return {
                 preparationTime,
                 totalPrice: Number(totalPrice.toFixed(2)),
                 orderId: orderDbReference.id,
                 restaurantId: createOrderDto.restaurantId
             };
-
-            return result;
         } catch (err) {
             console.log(err.message);
             // since we have errors lets rollback the changes we made
@@ -91,10 +91,21 @@ export class OrderService {
         }
     }
 
+    /**
+     * Find a user by email
+     * @param {string} email
+     * @returns {Promise<User>}
+     */
     async findUser(email: string) {
         return this.userService.findOne(email);
     }
 
+    /**
+     * Get orders of a restaurant using the restaurant email
+     * @param {number[]} ordersId
+     * @param {string} email
+     * @returns {Promise<Order[] | null>} orders
+     */
     async getOrdersRestaurant(ordersId: number[], email: string) {
         const orders: Order[] = [];
 
@@ -118,6 +129,12 @@ export class OrderService {
         return ordersId.length === orders.length ? orders : null;
     }
 
+    /**
+     * Get orders of a restaurant using the rider email
+     * @param {number[]} ordersId
+     * @param {string} riderEmail
+     * @returns {Promise<Order[] | null>} orders
+     */
     async getOrdersRider(
         ordersId: number[],
         riderEmail: string
@@ -143,6 +160,11 @@ export class OrderService {
         return ordersId.length === orders.length ? orders : null;
     }
 
+    /**
+     * Save orders
+     * @param {Order[]} orders
+     * @returns {Promise<Order[]>}
+     */
     async saveOrders(orders: Order[]) {
         return this.orderRepository.save(orders);
     }

@@ -1,10 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
-import { User, UserPayload } from "./entities/user.entity";
+import { User } from "./entities/user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import * as bcrypt from "bcrypt";
-import { JwtService } from "@nestjs/jwt";
 import { Person, Role } from "../person/entities/person.entity";
 import { PersonService } from "../person/person.service";
 
@@ -13,15 +11,16 @@ export class UserService {
     constructor(
         @InjectRepository(User)
         private userRepository: Repository<User>,
-        private personService: PersonService,
-        private jwtService: JwtService
+        private personService: PersonService
     ) {}
 
     /**
-     * Method for fast insertion of a single user
-     * @param createUserDto Data Transfer Object for user creation
+     * Insert a new user by creating a new person and then a new user
+     * @param {CreateUserDto} createUserDto dto to create a user
+     * @returns {Promise<User>} the user created
      */
     async insert(createUserDto: CreateUserDto) {
+        // create a person
         const personDto = {
             email: createUserDto.email,
             password: createUserDto.password,
@@ -30,18 +29,31 @@ export class UserService {
             role: Role.USER
         };
         const person = await this.personService.save(personDto);
+
+        // create a user
         const user = this.userRepository.create({
             firstName: createUserDto.firstName.toLowerCase(),
             lastName: createUserDto.lastName.toLowerCase()
         });
         user.person = person;
+
         return this.userRepository.save(user);
     }
 
+    /**
+     * Check if the email is already used by a person
+     * @param {string} email the email to check
+     * @returns {Promise<boolean>} true if the email is already used
+     */
     async isPresent(email: string) {
         return this.personService.isPresent(email);
     }
 
+    /**
+     * Find a user by email: find a person by email and then find a user by person
+     * @param {string} email the email of the user
+     * @returns {(Promise<User | null>)} the user found
+     */
     async findOne(email: string): Promise<User | null> {
         const person: Person | null = await this.personService.findOne(email);
         if (!person) {
@@ -57,39 +69,5 @@ export class UserService {
             return null;
         }
         return user;
-    }
-
-    async validateUser(email: string, password: string): Promise<UserPayload> {
-        try {
-            const user: User | null = await this.findOne(email);
-            if (!user) {
-                throw new Error();
-            }
-            // compare password
-            const result = await bcrypt.compare(password, user.person.password);
-
-            if (result) {
-                // return payload of jwt
-                return {
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.person.email,
-                    role: user.person.role
-                };
-            } else {
-                throw new Error();
-            }
-        } catch (e) {
-            return null;
-        }
-    }
-
-    async login(user: UserPayload): Promise<{
-        accessToken: string;
-    }> {
-        // generate a jwt token with user info
-        return {
-            accessToken: this.jwtService.sign(user)
-        };
     }
 }

@@ -11,11 +11,9 @@ import { ItemService } from "../item/item.service";
 import { ItemModule } from "../item/item.module";
 import { Item } from "../item/entities/item.entity";
 import { User } from "../user/entities/user.entity";
-import { JwtModule, JwtService } from "@nestjs/jwt";
+import { JwtModule } from "@nestjs/jwt";
 import { Person } from "../person/entities/person.entity";
-import { RiderModule } from "../rider/rider.module";
 import { Rider } from "../rider/entities/rider.entity";
-import { RiderService } from "../rider/rider.service";
 
 @Module({
     imports: [
@@ -26,12 +24,6 @@ import { RiderService } from "../rider/rider.service";
         JwtModule
     ],
     controllers: [OrderController],
-    providers: [
-        OrderService,
-        UserService,
-        PersonService,
-        ItemService,
-        JwtService
-    ]
+    providers: [OrderService, UserService, PersonService, ItemService]
 })
 export class OrderModule {}

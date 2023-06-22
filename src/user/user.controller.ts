@@ -2,18 +2,15 @@ import {
     Body,
     Controller,
     Get,
-    HttpCode,
     HttpException,
     HttpStatus,
     Post,
-    Request,
-    UseGuards
+    Request
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UtilsService } from "../utils/utils.service";
-import { User, UserPayload } from "./entities/user.entity";
-import { AuthGuard } from "@nestjs/passport";
+import { User } from "./entities/user.entity";
 import { Auth } from "../decorators/auth.decorator";
 import { Role } from "../person/entities/person.entity";
 
@@ -37,13 +34,12 @@ export class UserController {
             );
         }
 
-        // password validation, should return a list of message
-        const passwordValidationMessage = this.utilsService.passwordValidation(
+        const isValidPassword = this.utilsService.passwordValidation(
             createUserDto.password
         );
 
         // errors at password validation
-        if (!passwordValidationMessage) {
+        if (!isValidPassword) {
             throw new HttpException(
                 {
                     reason: "Password too weak: 'At least 8 characters\\nAt least 1 lowercase letter\\nAt least 1 uppercase letter\\nAt least 1 digit\\nAt least one of these symbols: !@#$%^&*()-,_+.()' "
@@ -57,12 +53,15 @@ export class UserController {
             createUserDto.password
         );
         try {
-            await this.userService.insert({
+            const user = await this.userService.insert({
                 ...createUserDto,
                 password: hashedPassword
             });
             return {
-                message: `User with email(${createUserDto.email}) is created.`
+                id: user.id,
+                email: user.person.email,
+                firstName: user.firstName,
+                lastName: user.lastName
             };
         } catch (e: any) {
             throw new HttpException(
@@ -72,14 +71,6 @@ export class UserController {
                 HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
-    }
-
-    @UseGuards(AuthGuard("userStrategy"))
-    @HttpCode(200)
-    @Post("/login")
-    async login(@Request() req) {
-        // return jwt token
-        return this.userService.login(req.user as UserPayload);
     }
 
     @Auth(Role.USER)

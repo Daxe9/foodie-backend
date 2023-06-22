@@ -4,7 +4,7 @@ import { PersonController } from "./person.controller";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Person } from "./entities/person.entity";
 import { LocalStrategy } from "./local.strategy";
-import { JwtModule, JwtService } from "@nestjs/jwt";
+import { JwtModule } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { PassportModule } from "@nestjs/passport";
 import { CustomJwtModule } from "../jwt/jwt.module";

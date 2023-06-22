@@ -7,11 +7,6 @@ import { Person } from "../person/entities/person.entity";
 import { PersonModule } from "../person/person.module";
 import { PersonService } from "../person/person.service";
 import { JwtModule } from "@nestjs/jwt";
-import { LocalStrategy } from "./local.strategy";
-import { JwtStrategy } from "../jwt/jwt.strategy";
-import { ConfigService } from "@nestjs/config";
-import { CustomJwtModule } from "../jwt/jwt.module";
-import { PassportModule } from "@nestjs/passport";
 import { Order } from "../order/entities/order.entity";
 import { OrderService } from "../order/order.service";
 import { OrderModule } from "../order/order.module";
@@ -25,18 +20,8 @@ import { Item } from "../item/entities/item.entity";
 @Module({
     controllers: [RiderController],
     imports: [
-        CustomJwtModule,
-        JwtModule.registerAsync({
-            inject: [ConfigService],
-            useFactory: async (configService: ConfigService) => ({
-                secret: configService.get<string>("JWT_SECRET") || "secret",
-                signOptions: {
-                    expiresIn: "1h"
-                }
-            })
-        }),
+        JwtModule,
         OrderModule,
-        PassportModule,
         PersonModule,
         UserModule,
         ItemModule,
@@ -45,8 +30,6 @@ import { Item } from "../item/entities/item.entity";
     providers: [
         RiderService,
         PersonService,
-        LocalStrategy,
-        JwtStrategy,
         OrderService,
         UserService,
         ItemService

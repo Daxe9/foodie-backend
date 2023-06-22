@@ -1,9 +1,6 @@
-import { Optional } from "@nestjs/common";
-import { IsEmail, Length, IsString, IsMobilePhone } from "class-validator";
 import {
     Entity,
     Column,
-    PrimaryColumn,
     OneToMany,
     OneToOne,
     JoinColumn,
@@ -25,13 +22,9 @@ export class User {
     id: number;
 
     @Column()
-    @IsString()
-    @Length(1)
     firstName: string;
 
     @Column()
-    @IsString()
-    @Length(1)
     lastName: string;
 
     @OneToOne(() => Person)
@@ -39,6 +32,5 @@ export class User {
     person: Person;
 
     @OneToMany(() => Order, (order) => order.user)
-    @Optional()
     orders: Order[];
 }

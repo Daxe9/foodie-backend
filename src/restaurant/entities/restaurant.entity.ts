@@ -12,15 +12,6 @@ import { Person, Role } from "../../person/entities/person.entity";
 import { Timetable } from "./timetable.entity";
 import { Order } from "../../order/entities/order.entity";
 
-export type RestaurantPayload = {
-    id: number;
-    email: string;
-    name: string;
-    address: string;
-    phone: string;
-    role: Role;
-};
-
 @Entity()
 export class Restaurant {
     @PrimaryGeneratedColumn()

@@ -1,11 +1,9 @@
 import {
     ArrayNotEmpty,
-    IsDecimal,
     IsInt,
     IsMobilePhone,
     IsNumber,
-    IsString,
-    ValidateNested
+    IsString
 } from "class-validator";
 
 export class CreateOrderDto {

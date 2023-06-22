@@ -6,15 +6,12 @@ import {
     HttpStatus,
     Patch,
     Post,
-    Request,
-    UseGuards
+    Request
 } from "@nestjs/common";
 import { RiderService } from "./rider.service";
 import { CreateRiderDto } from "./dto/create-rider.dto";
 import { UtilsService } from "../utils/utils.service";
-import { AuthGuard } from "@nestjs/passport";
-import { JwtAuthGuard } from "../jwt/jwt-auth.guard";
-import { Order, OrderStatus } from "../order/entities/order.entity";
+import { OrderStatus } from "../order/entities/order.entity";
 import { ChangeOrderStatusDto } from "../order/dto/change-order-status.dto";
 import { Auth } from "../decorators/auth.decorator";
 import { Role } from "../person/entities/person.entity";
@@ -75,13 +72,6 @@ export class RiderController {
         }
     }
 
-    @UseGuards(AuthGuard("riderStrategy"))
-    @HttpCode(200)
-    @Post("/login")
-    async login(@Request() req) {
-        return this.riderService.login(req.user);
-    }
-
     @Auth(Role.RIDER)
     @Patch("/active")
     async active(@Request() req) {
@@ -101,12 +91,11 @@ export class RiderController {
         @Request() req,
         @Body() changeOrderStatusDto: ChangeOrderStatusDto
     ) {
-        const orders: Order[] = await this.riderService.changeOrderStatus(
+        return await this.riderService.changeOrderStatus(
             changeOrderStatusDto.ordersId,
             req.user.email,
             OrderStatus.DELIVERY_START
         );
-        return orders;
     }
 
     @Auth(Role.RIDER)
@@ -116,11 +105,10 @@ export class RiderController {
         @Request() req,
         @Body() changeOrderStatusDto: ChangeOrderStatusDto
     ) {
-        const orders: Order[] = await this.riderService.changeOrderStatus(
+        return await this.riderService.changeOrderStatus(
             changeOrderStatusDto.ordersId,
             req.user.email,
             OrderStatus.DELIVERY_END
         );
-        return orders;
     }
 }

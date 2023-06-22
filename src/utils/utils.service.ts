@@ -6,7 +6,6 @@ export class UtilsService {
     private readonly saltRounds = 10;
 
     passwordValidation(password: string): boolean {
-        // TODO: Test
         // At least 8 characters
         // At least one lowercase letter
         // At least one uppercase letter

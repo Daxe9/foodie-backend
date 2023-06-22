@@ -1,11 +1,4 @@
-import {
-    IsNumber,
-    IsString,
-    Length,
-    IsOptional,
-    IsInt,
-    IsDecimal
-} from "class-validator";
+import { IsNumber, IsString, Length, IsInt, IsDecimal } from "class-validator";
 import {
     Column,
     Entity,

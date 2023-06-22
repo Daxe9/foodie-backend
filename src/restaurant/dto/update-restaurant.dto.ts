@@ -1,6 +1,6 @@
 import { PartialType } from "@nestjs/mapped-types";
 import { CreateRestaurantDto } from "./create-restaurant.dto";
-import { IsMobilePhone, IsOptional, IsString, Length } from "class-validator";
+import { IsMobilePhone, IsString, Length } from "class-validator";
 
 export class UpdateRestaurantDto extends PartialType(CreateRestaurantDto) {
     @Length(2, 255)

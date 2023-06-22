@@ -7,21 +7,18 @@ import {
     HttpStatus,
     Patch,
     Post,
-    Request,
-    UseGuards
+    Request
 } from "@nestjs/common";
 import { RestaurantService } from "./restaurant.service";
 import { UtilsService } from "../utils/utils.service";
 import { CreateRestaurantDto } from "./dto/create-restaurant.dto";
-import { Restaurant, RestaurantPayload } from "./entities/restaurant.entity";
-import { JwtAuthGuard } from "../jwt/jwt-auth.guard";
-import { AuthGuard } from "@nestjs/passport";
+import { Restaurant } from "./entities/restaurant.entity";
 import { UpdateItemsDto } from "./dto/update-items.dto";
 import { ItemService } from "../item/item.service";
 import { Item } from "../item/entities/item.entity";
 import { CreateItemDto } from "../item/dto/create-item.dto";
 import { GetOrdersDto } from "./dto/get-orders.dto";
-import { Order, OrderStatus } from "../order/entities/order.entity";
+import { OrderStatus } from "../order/entities/order.entity";
 import { ChangeOrderStatusDto } from "../order/dto/change-order-status.dto";
 import { Auth } from "../decorators/auth.decorator";
 import { Role } from "../person/entities/person.entity";
@@ -84,13 +81,6 @@ export class RestaurantController {
                 HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
-    }
-
-    @UseGuards(AuthGuard("restaurantStrategy"))
-    @HttpCode(200)
-    @Post("/login")
-    async login(@Request() req) {
-        return this.restaurantService.login(req.user as RestaurantPayload);
     }
 
     @Auth(Role.RESTAURANT)
@@ -198,12 +188,11 @@ export class RestaurantController {
         @Request() req,
         @Body() changeOrderStatusDto: ChangeOrderStatusDto
     ) {
-        const orders: Order[] = await this.restaurantService.changeOrderStatus(
+        return await this.restaurantService.changeOrderStatus(
             changeOrderStatusDto.ordersId,
             req.user.email,
             OrderStatus.PREPARATION_START
         );
-        return orders;
     }
 
     @Auth(Role.RESTAURANT)
@@ -213,12 +202,11 @@ export class RestaurantController {
         @Request() req,
         @Body() changeOrderStatusDto: ChangeOrderStatusDto
     ) {
-        const orders: Order[] = await this.restaurantService.changeOrderStatus(
+        return await this.restaurantService.changeOrderStatus(
             changeOrderStatusDto.ordersId,
             req.user.email,
             OrderStatus.PREPARATION_END
         );
-        return orders;
     }
 
     @Get("/menu")
@@ -243,8 +231,6 @@ export class RestaurantController {
 
     @Get("/all")
     async findAll() {
-        const restaurants: Restaurant[] =
-            await this.restaurantService.findAll();
-        return restaurants;
+        return await this.restaurantService.findAll();
     }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { CreatePersonDto } from "./dto/create-person.dto";
+import { CreatePersonDto } from "../restaurant/dto/create-person.dto";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Person, PersonPayload } from "./entities/person.entity";
@@ -14,14 +14,18 @@ export class PersonService {
         private jwtService: JwtService
     ) {}
 
+    /**
+     * Create a new person
+     * @param {CreatePersonDto} createPersonDto person data
+     */
     create(createPersonDto: CreatePersonDto) {
         return this.personRepository.create(createPersonDto);
     }
 
     /**
      * Check whether a person with given email is present or not
-     * @param email
-     * @return Promise<boolean>
+     * @param {string} email email to check
+     * @return {Promise<boolean>} true if present, false otherwise
      */
     async isPresent(email: string): Promise<boolean> {
         const result = await this.personRepository.findOneBy({ email });
@@ -29,13 +33,19 @@ export class PersonService {
     }
 
     /**
-     * return the first user with given email
-     * @param email
+     * Find the user with given email
+     * @param {string} email email to find
+     * @returns {Promise<Person | null>} person if found, null otherwise
      */
     async findOne(email: string): Promise<Person | null> {
         return this.personRepository.findOneBy({ email });
     }
 
+    /**
+     * Save the person to database
+     * @param {string} createPersonDto person data
+     * @returns {Promise<Person>} saved person
+     */
     async save(createPersonDto: CreatePersonDto) {
         // convert all values to lowercase except for password
         const pwTemp = createPersonDto.password;
@@ -47,10 +57,16 @@ export class PersonService {
         return this.personRepository.save(createPersonDto);
     }
 
+    /**
+     * Fallback method of login validation
+     * @param {string} email email
+     * @param {string} password password
+     * @returns {(Promise<PersonPayload | null>)} payload of jwt
+     */
     async validateUser(
         email: string,
         password: string
-    ): Promise<PersonPayload> {
+    ): Promise<PersonPayload | null> {
         try {
             const person: Person | null = await this.findOne(email);
             if (!person) {
@@ -73,9 +89,14 @@ export class PersonService {
         }
     }
 
-    async login(person: PersonPayload): Promise<{
+    /**
+     * Login the user
+     * @param {PersonPayload} person
+     * @returns {{access_token: string}} access token
+     */
+    login(person: PersonPayload): {
         accessToken: string;
-    }> {
+    } {
         // generate a jwt token with user info
         return {
             accessToken: this.jwtService.sign(person)

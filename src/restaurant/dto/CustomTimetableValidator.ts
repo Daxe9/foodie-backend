@@ -25,10 +25,7 @@ export class CustomSingleDayTimeValidator
             return false;
         }
         const parts = time.split(":");
-        if (Number(parts[0]) > 23 || Number(parts[1]) > 59) {
-            return false;
-        }
-        return true;
+        return !(Number(parts[0]) > 23 || Number(parts[1]) > 59);
     }
 
     defaultMessage(args: ValidationArguments) {

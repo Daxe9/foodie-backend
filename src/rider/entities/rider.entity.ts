@@ -1,13 +1,11 @@
 import {
     Entity,
     Column,
-    PrimaryColumn,
     OneToMany,
     OneToOne,
     JoinColumn,
     PrimaryGeneratedColumn
 } from "typeorm";
-import { IsBoolean, IsEmail, IsMobilePhone, IsString } from "class-validator";
 import { Order } from "../../order/entities/order.entity";
 import { Person, Role } from "../../person/entities/person.entity";
 
