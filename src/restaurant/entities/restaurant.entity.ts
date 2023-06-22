@@ -8,7 +8,7 @@ import {
     OneToOne,
     JoinColumn
 } from "typeorm";
-import { Person, Role } from "../../person/entities/person.entity";
+import { Person } from "../../person/entities/person.entity";
 import { Timetable } from "./timetable.entity";
 import { Order } from "../../order/entities/order.entity";
 
