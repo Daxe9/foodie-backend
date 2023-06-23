@@ -32,7 +32,7 @@ import { Person } from "./person/entities/person.entity";
                 type: "mysql",
                 host: "localhost",
                 port: 3306,
-                database: "FOODIE_DEV",
+                database: configService.get<string>("DATABASE_NAME") || "",
                 username: configService.get<string>("DATABASE_USER") || "",
                 password: configService.get<string>("DATABASE_PASSWORD") || "",
                 entities: [
