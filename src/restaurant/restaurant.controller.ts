@@ -71,7 +71,12 @@ export class RestaurantController {
                 password: hashedPassword
             });
             return {
-                message: `Restaurant with email(${restaurant.person.email}) is created.`
+                id: restaurant.id,
+                email: restaurant.person.email,
+                name: restaurant.name,
+                url: restaurant.url,
+                category: restaurant.category,
+                address: restaurant.person.address
             };
         } catch (e: any) {
             throw new HttpException(

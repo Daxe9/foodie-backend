@@ -55,12 +55,14 @@ export class RiderController {
             createRiderDto.password
         );
         try {
-            await this.riderService.insert({
+            const rider = await this.riderService.insert({
                 ...createRiderDto,
                 password: hashedPassword
             });
             return {
-                message: `Rider with email(${createRiderDto.email}) is created.`
+                id: rider.id,
+                email: rider.person.email,
+                phone: rider.person.phone
             };
         } catch (e: any) {
             throw new HttpException(
